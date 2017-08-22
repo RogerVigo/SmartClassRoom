@@ -16,27 +16,27 @@
 
 
 /**
- * English strings for newmodule
+ * English strings for smartclassroom
  *
  * You can have a rather longer description of the file as well,
  * if you like, and it can span multiple lines.
  *
- * @package    mod_newmodule
+ * @package    mod_smartclassroom
  * @copyright  2016 Your Name <your@email.address>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['modulename'] = 'newmodule';
-$string['modulenameplural'] = 'newmodules';
-$string['modulename_help'] = 'Use the newmodule module for... | The newmodule module allows...';
-$string['newmodule:addinstance'] = 'Add a new newmodule';
-$string['newmodule:submit'] = 'Submit newmodule';
-$string['newmodule:view'] = 'View newmodule';
-$string['newmodulefieldset'] = 'Custom example fieldset';
-$string['newmodulename'] = 'newmodule name';
-$string['newmodulename_help'] = 'This is the content of the help tooltip associated with the newmodulename field. Markdown syntax is supported.';
-$string['newmodule'] = 'newmodule';
-$string['pluginadministration'] = 'newmodule administration';
-$string['pluginname'] = 'newmodule';
+$string['modulename'] = 'smartclassroom';
+$string['modulenameplural'] = 'smartclassrooms';
+$string['modulename_help'] = 'Use the smartclassroom module for... | The smartclassroom module allows...';
+$string['smartclassroom:addinstance'] = 'Add a new smartclassroom';
+$string['smartclassroom:submit'] = 'Submit smartclassroom';
+$string['smartclassroom:view'] = 'View smartclassroom';
+$string['smartclassroomfieldset'] = 'Custom example fieldset';
+$string['smartclassroomname'] = 'smartclassroom name';
+$string['smartclassroomname_help'] = 'This is the content of the help tooltip associated with the smartclassroomname field. Markdown syntax is supported.';
+$string['smartclassroom'] = 'smartclassroom';
+$string['pluginadministration'] = 'smartclassroom administration';
+$string['pluginname'] = 'smartclassroom';
