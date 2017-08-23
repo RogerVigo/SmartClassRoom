@@ -26,6 +26,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 $subplugins = array(
-    'smartclassroomadmin' => 'mod/smartclassroom/admin.php',
+    'smartclassroomadmin' => 'mod/smartclassroom/admin',
 );
 
