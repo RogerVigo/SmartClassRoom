@@ -9,7 +9,7 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="apikey" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="123456789" SEQUENCE="false" COMMENT="apikey to auth vs SCR server"/>
         <FIELD NAME="password" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Group that owns this wiki"/>
-        <FIELD NAME="serverIP" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="127.0.0.1" SEQUENCE="false" COMMENT="IP of the server of SmartClassRoom"/>
+        <FIELD NAME="server_ip" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="127.0.0.1" SEQUENCE="false" COMMENT="IP of the server of SmartClassRoom"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

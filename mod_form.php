@@ -71,6 +71,7 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
 
         $mform->addElement('header', 'unittype', get_string('unittype', 'smartclassroom'));
+
         //$mform->addElement('static', 'label2', 'smartclassroomsetting2', 'Your smartclassroom fields go here. Replace me!');
 	$mform->addElement('select', 'course', get_string('course', 'smartclassroom'), array(
 		"1primary" => get_string("firstprimary", 'smartclassroom'),
