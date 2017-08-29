@@ -74,5 +74,4 @@ $string['setsmartclassroomip'] = 'Set SmartClassRoom server IP';
 $string['token'] = 'Authentification token';
 $string['authtoken'] = 'Authentification token received';
 $string['tokensection'] = 'Token section';
-$string['connect'] = 'Connect';
 $string[''] = '';
