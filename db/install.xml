@@ -25,7 +25,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="smartclassroom_activities" COMMENT="Guarda la configuración de las actividades SmartClassRoom">
+    <TABLE NAME="smartclassroom" COMMENT="Guarda la configuración de las actividades SmartClassRoom">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Course smartclassroom activity belongs to"/>

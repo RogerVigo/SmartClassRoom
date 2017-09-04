@@ -69,12 +69,14 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
 
         // Adding the rest of smartclassroom settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
-
+        
+        // ----------------------------------------------------------------------
         $mform->addElement('header', 'unittype', get_string('unittype', 'smartclassroom'));
 
         //$mform->addElement('static', 'label2', 'smartclassroomsetting2', 'Your smartclassroom fields go here. Replace me!');
-	$mform->addElement('select', 'course', get_string('course', 'smartclassroom'), array(
-		"1primary" => get_string("firstprimary", 'smartclassroom'),
+	$mform->addElement('select', 'scrcourse', get_string('course', 'smartclassroom'), array(
+		"" => get_string("selectcourse",'smartclassroom'),
+                "1primary" => get_string("firstprimary", 'smartclassroom'),
 		"2primary" => get_string("secondprimary", 'smartclassroom'),
 		"3primary" => get_string("thirdprimary", 'smartclassroom'),
 		"4primary" => get_string("fourthprimary", 'smartclassroom'),
@@ -85,14 +87,16 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
 		"3secundary" => get_string("thirdsecundary", 'smartclassroom'),
 		"4secundary" => get_string("fourthsecundary", 'smartclassroom'))
 	);
-	$mform->addElement('select', 'book', get_string('book', 'smartclassroom'), array(
-		"maths" => get_string("maths", 'smartclassroom'),
+	$mform->addElement('select', 'scrbook', get_string('book', 'smartclassroom'), array(
+		"" => get_string("selectbook",'smartclassroom'),
+                "maths" => get_string("maths", 'smartclassroom'),
 		"spanish" => get_string("spanish", 'smartclassroom'),
 		"english" => get_string("english", 'smartclassroom'),
 		"science" => get_string("science", 'smartclassroom'),
 	));
-	$mform->addElement('select', 'unity', get_string('unity', 'smartclassroom'), array(
-		"first" => get_string("first", 'smartclassroom'),
+	$mform->addElement('select', 'scrunity', get_string('unity', 'smartclassroom'), array(
+		"" => get_string("selectunit",'smartclassroom'),
+                "first" => get_string("first", 'smartclassroom'),
 		"second" => get_string("second", 'smartclassroom'),
 		"third" => get_string("third", 'smartclassroom'),
 	));

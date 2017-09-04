@@ -30,14 +30,14 @@ require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
 
 $id = optional_param('id', 0, PARAM_INT); // Course_module ID, or
-$n  = optional_param('n', 0, PARAM_INT);  // ... smartclassroom instance ID - it should be named as the first character of the module.
+$sid  = optional_param('s', 0, PARAM_INT);  // ... smartclassroom instance ID - it should be named as the first character of the module.
 
 if ($id) {
     $cm         = get_coursemodule_from_id('smartclassroom', $id, 0, false, MUST_EXIST);
     $course     = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
     $smartclassroom  = $DB->get_record('smartclassroom', array('id' => $cm->instance), '*', MUST_EXIST);
-} else if ($n) {
-    $smartclassroom  = $DB->get_record('smartclassroom', array('id' => $n), '*', MUST_EXIST);
+} else if ($sid) {
+    $smartclassroom  = $DB->get_record('smartclassroom', array('id' => $sid), '*', MUST_EXIST);
     $course     = $DB->get_record('course', array('id' => $smartclassroom->course), '*', MUST_EXIST);
     $cm         = get_coursemodule_from_instance('smartclassroom', $smartclassroom->id, $course->id, false, MUST_EXIST);
 } else {
@@ -45,13 +45,13 @@ if ($id) {
 }
 
 require_login($course, true, $cm);
-
-$event = \mod_smartclassroom\event\course_module_viewed::create(array(
-    'objectid' => $PAGE->cm->instance,
-    'context' => $PAGE->context,
-));
-$event->add_record_snapshot('course', $PAGE->course);
-$event->add_record_snapshot($PAGE->cm->modname, $smartclassroom);
+$params = array(
+        'context' => context_module::instance($cm->id),
+        'objectid' => $smartclassroom->id,
+    );
+$event = \mod_smartclassroom\event\course_module_viewed::create($params);
+$event->add_record_snapshot('smartclassroom', $smartclassroom);
+//$event->add_record_snapshot($PAGE->cm->modname, $smartclassroom);
 $event->trigger();
 
 // Print the page header.
