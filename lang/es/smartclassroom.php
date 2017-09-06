@@ -28,7 +28,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['modulename'] = 'SmartClassRoom';
+$string['modulename'] = 'Smart ClassRoom';
 $string['modulenameplural'] = 'SmartClassRooms';
 $string['modulename_help'] = 'Añada una unidad de SmartClassRoom | La actividad permite ver y gestionar información de las Unidades SmartClassRoom de la web de Netex';
 $string['smartclassroom:addinstance'] = 'Añadir una nueva SmartClassRoom';
@@ -37,9 +37,9 @@ $string['smartclassroom:view'] = 'Ver SmartClassRoom';
 $string['smartclassroomfieldset'] = 'Custom example fieldset';
 $string['smartclassroomname'] = 'Nombre SmartClassRoom';
 $string['smartclassroomname_help'] = 'This is the content of the help tooltip associated with the smartclassroomname field. Markdown syntax is supported.';
-$string['smartclassroom'] = 'SmartClassRoom';
+$string['smartclassroom'] = 'Smart ClassRoom';
 $string['pluginadministration'] = 'Administración de SmartClassRoom';
-$string['pluginname'] = 'SmartClassRoom';
+$string['pluginname'] = 'Smart ClassRoom';
 $string['unittype'] = 'Tipo de Unidad';
 $string['book'] = 'Libro';
 $string['unity'] = 'Unidad';

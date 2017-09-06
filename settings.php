@@ -48,17 +48,46 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
 	$settings->add(new admin_setting_configtext('SmartClassRoom_SCR', get_string('smartclassroomip', 'smartclassroom'),
             get_string('setsmartclassroomip', 'smartclassroom'), "", PARAM_TEXT));
 	try{
-		$curl = curl_init();
+		$curlResource = curl_init();
 	
-		curl_setopt($curl, CURLOPT_URL, "http://gradiant-dev-classroom.smarted.cloud:3065/api/v1/oauth/token?grant_type=client_credentials");
-		//curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic ' + btoa('smart-client:gave-chile-moment-wood'));
+		curl_setopt($curlResource, CURLOPT_URL, "http://gradiant-dev-classroom.smarted.cloud:3065/api/v1/oauth/token?grant_type=client_credentials");
+		$authHeader = 'Authorization: Basic ' . base64_encode('smart-client:gave-chile-moment-wood');
+                //Header con el authorization y aceptamos json
+                curl_setopt($curlResource, CURLOPT_HTTPHEADER, array($authHeader,'Accept: application/json'));
+	        //no vuelques la respuesta, devuelvemela en un string
+                curl_setopt($curlResource, CURLOPT_RETURNTRANSFER, true);
+	        //curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic ');
+		$resultAsString = curl_exec($curlResource);
+	        $resultAsArray = json_decode($resultAsString);
+	        $anotherWayOfError = curl_error($curlResource);
+		curl_close($curlResource);
+		/*if (isset($resultAsArray['access_token'])) 
+                        $settings->add(new admin_setting_configtext('SmartClassRoom_Token_Response', 
+                                                                get_string('token', 'smartclassroom'),
+                                                                get_string('authtoken', 'smartclassroom'), 
+                                                                $resultAsArray['access_token'], 
+                                                                PARAM_TEXT));
+                    else if (isset($resultAsArray['error'])) 
+                                                    $settings->add(new admin_setting_configtext('SmartClassRoom_Token_Response', 
+                                                                    get_string('token', 'smartclassroom'),
+                                                                    get_string('authtoken', 'smartclassroom'),
+                                                                    "Error recibido: " . $resultAsArray['error'],
+                                                                    PARAM_TEXT));
+                        else*/ if (!$resultAsString)  $settings->add(new admin_setting_configtext('SmartClassRoom_Token_Response', 
+                                                                        get_string('token', 'smartclassroom'), 
+                                                                        get_string('authtoken', 'smartclassroom'),
+                                                                        $resultAsString ,
+                                                                        PARAM_TEXT));
+                            else $settings->add(new admin_setting_configtext('SmartClassRoom_Token_Response', 
+                                                                        get_string('token', 'smartclassroom'), 
+                                                                        get_string('authtoken', 'smartclassroom'),
+                                                                        'error irrecuperable: '.$anotherWayOfError,
+                                                                        PARAM_TEXT));
 	
-		$result = curl_exec($curl);
-		curl_close($curl);
 	}catch(Exception $e){
 		
 	}
-	$settings->add(new admin_setting_configtext('SmartClassRoom_Token', get_string('token', 'smartclassroom'),
+        $settings->add(new admin_setting_configtext('SmartClassRoom_Token', get_string('token', 'smartclassroom'),
             "<button type=\"button\" class=\"get_token_button\">{$connect}</button>", "", PARAM_TEXT));
 }
 

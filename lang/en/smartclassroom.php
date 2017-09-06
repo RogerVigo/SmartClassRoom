@@ -28,7 +28,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['modulename'] = 'SmartClassRoom';
+$string['modulename'] = 'Smart ClassRoom';
 $string['modulenameplural'] = 'SmartClassRooms';
 $string['modulename_help'] = 'Trololo Use the smartclassroom module for... | The smartclassroom module allows...';
 $string['smartclassroom:addinstance'] = 'Add a new smartclassroom';
@@ -37,9 +37,9 @@ $string['smartclassroom:view'] = 'View smartclassroom';
 $string['smartclassroomfieldset'] = 'Custom example fieldset';
 $string['smartclassroomname'] = 'smartclassroom cd ..name';
 $string['smartclassroomname_help'] = 'This is the content of the help tooltip associated with the smartclassroomname field. Markdown syntax is supported.';
-$string['smartclassroom'] = 'SmartClassRoom';
+$string['smartclassroom'] = 'Smart ClassRoom';
 $string['pluginadministration'] = 'smartclassroom administration';
-$string['pluginname'] = 'SmartClassRoom';
+$string['pluginname'] = 'Smart ClassRoom';
 $string['unittype'] = 'Unit type';
 $string['book'] = 'Book';
 $string['unity'] = 'Unity';
