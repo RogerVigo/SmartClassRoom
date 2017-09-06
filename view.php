@@ -49,10 +49,10 @@ $params = array(
         'context' => context_module::instance($cm->id),
         'objectid' => $smartclassroom->id,
     );
-$event = \mod_smartclassroom\event\course_module_viewed::create($params);
+/*$event = \mod_smartclassroom\event\course_module_viewed::create($params);
 $event->add_record_snapshot('smartclassroom', $smartclassroom);
 //$event->add_record_snapshot($PAGE->cm->modname, $smartclassroom);
-$event->trigger();
+$event->trigger();*/
 
 // Print the page header.
 
