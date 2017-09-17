@@ -80,9 +80,11 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
             $settings->add(new admin_setting_configtext('smartclassroom_token', get_string('token', 'smartclassroom'),
                          "<button type=\"button\" class=\"get_token_button\">{$connect}</button>", 
                                  '', PARAM_TEXT)); 
-            echo get_string('smartclassroommodconnectionresult', 'smartclassroom').
-                 '<p style="width:50%;word-wrap:break-word">'.$resultAsObject->access_token.'</p>';
-                          
+            $settings->add(new admin_setting_heading('smartclassroommodconnectionresult', 
+                                                    get_string('smartclassroommodconnectionresult', 'smartclassroom'),
+                                                    '<p title="'.$resultAsObject->access_token.'">'.substr($resultAsObject->access_token,50).'</p>'
+                                                    )
+                          );
                         
         }
                     else if (isset($resultAsObject->error)) 
