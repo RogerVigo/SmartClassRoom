@@ -36,15 +36,19 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
 //]]
 </script>
 ";    
-    
+        $settings->add(new admin_setting_heading('smartclassroommodeditcredentials', get_string('editcredentials', 'smartclassroom'), get_string('editcredentialsextended', 'smartclassroom')));
 	$settings->add(new admin_setting_configtext('smartclassroom_api_key', get_string('apikey', 'smartclassroom'),
             get_string('setapikey', 'smartclassroom'), "smart-xunta", PARAM_TEXT));
 	$settings->add(new admin_setting_configtext('smartclassroom_secret', get_string('secret', 'smartclassroom'),
             get_string('setsecret', 'smartclassroom'), "gave-chile-moment-wood", PARAM_TEXT));
+        $settings->add(new admin_setting_configtext('smartclassroom_clientid', get_string('clientid', 'smartclassroom'),
+            get_string('clientid', 'smartclassroom'), "1", PARAM_TEXT));
+        
+        $settings->add(new admin_setting_heading('smartclassroommodconnectionsettings', get_string('smartclassroommodconnectionsettings', 'smartclassroom'), get_string('smartclassroommodconnectionsettingsextended', 'smartclassroom')));
 	$settings->add(new admin_setting_configtext('smartclassroom_oauth', get_string('oauthip', 'smartclassroom'),
-            get_string('setoauthip', 'smartclassroom'), "", PARAM_TEXT));
+            get_string('setoauthip', 'smartclassroom'), "http://gradiant-dev-classroom.smarted.cloud:3065", PARAM_TEXT));
 	$settings->add(new admin_setting_configtext('smartclassroom_backoffice', get_string('backofficeip', 'smartclassroom'),
-            get_string('setbackofficeip', 'smartclassroom'), "", PARAM_TEXT));
+            get_string('setbackofficeip', 'smartclassroom'), "http://wm33.netexlearning.cloud/tdidacta-webapp", PARAM_TEXT));
 	$settings->add(new admin_setting_configtext('smartclassroom_scr', get_string('smartclassroomip', 'smartclassroom'),
             get_string('setsmartclassroomip', 'smartclassroom'), "", PARAM_TEXT));
 	try{
@@ -63,19 +67,29 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
 	        $resultAsObject = json_decode($resultAsString);
 	        $anotherWayOfError = curl_error($curlResource);
 		curl_close($curlResource);
-		if (isset($resultAsObject->access_token)) 
-                        $settings->add(new admin_setting_configtext('smartclassroom_token_response', 
-                                                                get_string('token', 'smartclassroom'),
-                                                                get_string('authtoken', 'smartclassroom'), 
-                                                                $resultAsObject->access_token, 
-                                                                PARAM_TEXT));
+		
+	}catch(Exception $e){
+		
+	}
+        if (isset($resultAsObject->access_token)) {
+            
+            /*$settings->add(new admin_setting_configtext('smartclassroom_token_response', 
+                                                               get_string('token', 'smartclassroom'),
+                                                               get_string('authtoken', 'smartclassroom'), 
+                                                               '', PARAM_TEXT));*/
+            $settings->add(new admin_setting_configtext('smartclassroom_token', get_string('token', 'smartclassroom'),
+                         "<button type=\"button\" class=\"get_token_button\">{$connect}</button>", 
+                                 '', PARAM_TEXT)); 
+            $settings->add(new admin_setting_heading('smartclassroommodconnectionresult', get_string('smartclassroommodconnectionresult', 'smartclassroom'),$resultAsObject->access_token ));
+                        
+        }
                     else if (isset($resultAsObject->error)) 
                                                     $settings->add(new admin_setting_configtext('smartclassroom_token_response', 
                                                                     get_string('token', 'smartclassroom'),
                                                                     get_string('authtoken', 'smartclassroom'),
                                                                     "Error recibido: " . $resultAsObject->error,
                                                                     PARAM_TEXT));
-                        else if (!$resultAsString)  $settings->add(new admin_setting_configtext('smartclassroom_token_response', 
+                       /* else if (!$resultAsString)  $settings->add(new admin_setting_configtext('smartclassroom_token_response', 
                                                                         get_string('token', 'smartclassroom'), 
                                                                         get_string('authtoken', 'smartclassroom'),
                                                                         $resultAsString ,
@@ -84,17 +98,9 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
                                                                         get_string('token', 'smartclassroom'), 
                                                                         get_string('authtoken', 'smartclassroom'),
                                                                         'error irrecuperable: '.$anotherWayOfError,
-                                                                        PARAM_TEXT));
+                                                                        PARAM_TEXT));*/
 	
-	}catch(Exception $e){
-		$settings->add(new admin_setting_configtext('smartclassroom_token_response', 
-                                                                        get_string('token', 'smartclassroom'), 
-                                                                        get_string('authtoken', 'smartclassroom'),
-                                                                        'error irrecuperable exception: '.$anotherWayOfError,
-                                                                        PARAM_TEXT));
-	}
-        $settings->add(new admin_setting_configtext('smartclassroom_token', get_string('token', 'smartclassroom'),
-            "<button type=\"button\" class=\"get_token_button\">{$connect}</button>", "", PARAM_TEXT));
+        
 }
 
 

@@ -87,4 +87,5 @@ $string['editcredentialsextended'] = 'Introduzca aqui las credenciales que se ut
 $string['smartclassroommodconnectionsettings'] = 'Valores predeterminados para las ips de los servidores';
 $string['smartclassroommodconnectionsettingsextended'] = 'Introduzca aqui las ips o dominios de conexion de las apis de netex';
 $string['clientid'] = 'Identificador de Cliente en Netex';
+$string['smartclassroommodconnectionresult'] = 'Resultado de la autenticacion';
 $string[''] = '';
