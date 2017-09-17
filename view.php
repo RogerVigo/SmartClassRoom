@@ -52,7 +52,7 @@ $params = array(
 /*$event = \mod_smartclassroom\event\course_module_viewed::create($params);
 $event->add_record_snapshot('smartclassroom', $smartclassroom);
 //$event->add_record_snapshot($PAGE->cm->modname, $smartclassroom);
-$event->trigger();*/
+$event->trigger();*
 
 // Print the page header.
 
@@ -74,9 +74,69 @@ echo $OUTPUT->header();
 if ($smartclassroom->intro) {
     echo $OUTPUT->box(format_module_intro('smartclassroom', $smartclassroom, $cm->id), 'generalbox mod_introbox', 'smartclassroomintro');
 }
+/*
+try{
+		$curlResource = curl_init();
+	
+		curl_setopt($curlResource, CURLOPT_URL, "http://gradiant-dev-classroom.smarted.cloud:3065/api/v1/oauth/token?grant_type=client_credentials");
+		$authHeader = 'Authorization: Basic ' . base64_encode('smart-client:gave-chile-moment-wood');
+                //Peticion POST
+                curl_setopt($curlResource, CURLOPT_POST, true);
+                //Header con el authorization
+                curl_setopt($curlResource, CURLOPT_HTTPHEADER, array($authHeader));
+	        //no vuelques la respuesta, devuelvemela en un string
+                curl_setopt($curlResource, CURLOPT_RETURNTRANSFER, true);
+	        //curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic ');
+		$resultAsString = curl_exec($curlResource);
+	        $resultAsObject = json_decode($resultAsString);
+	        $anotherWayOfError = curl_error($curlResource);
+		curl_close($curlResource);
+		if (isset($resultAsObject->access_token)) 
+                        $settings->add(new admin_setting_configtext('SmartClassRoom_Token_Response', 
+                                                                get_string('token', 'smartclassroom'),
+                                                                get_string('authtoken', 'smartclassroom'), 
+                                                                $resultAsObject->access_token, 
+                                                                PARAM_TEXT));
+                    else if (isset($resultAsObject->error)) 
+                                                    $settings->add(new admin_setting_configtext('SmartClassRoom_Token_Response', 
+                                                                    get_string('token', 'smartclassroom'),
+                                                                    get_string('authtoken', 'smartclassroom'),
+                                                                    "Error recibido: " . $resultAsObject->error,
+                                                                    PARAM_TEXT));
+                        else if (!$resultAsString)  $settings->add(new admin_setting_configtext('SmartClassRoom_Token_Response', 
+                                                                        get_string('token', 'smartclassroom'), 
+                                                                        get_string('authtoken', 'smartclassroom'),
+                                                                        $resultAsString ,
+                                                                        PARAM_TEXT));
+                            else $settings->add(new admin_setting_configtext('SmartClassRoom_Token_Response', 
+                                                                        get_string('token', 'smartclassroom'), 
+                                                                        get_string('authtoken', 'smartclassroom'),
+                                                                        'error irrecuperable: '.$anotherWayOfError,
+                                                                        PARAM_TEXT));
+	
+	}catch(Exception $e){
+		$settings->add(new admin_setting_configtext('SmartClassRoom_Token_Response', 
+                                                                        get_string('token', 'smartclassroom'), 
+                                                                        get_string('authtoken', 'smartclassroom'),
+                                                                        'error irrecuperable exception: '.$anotherWayOfError,
+                                                                        PARAM_TEXT));
+	}
+
+*/
+
+
 
 // Replace the following lines with you own code.
 echo $OUTPUT->heading('Yay! It works!');
+
+echo $OUTPUT->heading('Se ha pedido el curso: ');
+echo '<p>'.get_string($smartclassroom->scrunit,'smartclassroom').'</p>';
+echo $OUTPUT->heading('Se ha pedido el libro: ');
+echo '<p>'.get_string($smartclassroom->scrbook,'smartclassroom').'</p>';
+echo $OUTPUT->heading('Se ha pedido la unidad: ');
+echo '<p>'.get_string($smartclassroom->scrcourse,'smartclassroom').'</p>';
+
+echo $OUTPUT->heading('Se mostrara al preguntar al servidor');
 
 // Finish the page.
 echo $OUTPUT->footer();

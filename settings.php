@@ -52,28 +52,30 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
 	
 		curl_setopt($curlResource, CURLOPT_URL, "http://gradiant-dev-classroom.smarted.cloud:3065/api/v1/oauth/token?grant_type=client_credentials");
 		$authHeader = 'Authorization: Basic ' . base64_encode('smart-client:gave-chile-moment-wood');
-                //Header con el authorization y aceptamos json
-                curl_setopt($curlResource, CURLOPT_HTTPHEADER, array($authHeader,'Accept: application/json'));
+                //Peticion POST
+                curl_setopt($curlResource, CURLOPT_POST, true);
+                //Header con el authorization
+                curl_setopt($curlResource, CURLOPT_HTTPHEADER, array($authHeader));
 	        //no vuelques la respuesta, devuelvemela en un string
                 curl_setopt($curlResource, CURLOPT_RETURNTRANSFER, true);
 	        //curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic ');
 		$resultAsString = curl_exec($curlResource);
-	        $resultAsArray = json_decode($resultAsString);
+	        $resultAsObject = json_decode($resultAsString);
 	        $anotherWayOfError = curl_error($curlResource);
 		curl_close($curlResource);
-		/*if (isset($resultAsArray['access_token'])) 
+		if (isset($resultAsObject->access_token)) 
                         $settings->add(new admin_setting_configtext('SmartClassRoom_Token_Response', 
                                                                 get_string('token', 'smartclassroom'),
                                                                 get_string('authtoken', 'smartclassroom'), 
-                                                                $resultAsArray['access_token'], 
+                                                                $resultAsObject->access_token, 
                                                                 PARAM_TEXT));
-                    else if (isset($resultAsArray['error'])) 
+                    else if (isset($resultAsObject->error)) 
                                                     $settings->add(new admin_setting_configtext('SmartClassRoom_Token_Response', 
                                                                     get_string('token', 'smartclassroom'),
                                                                     get_string('authtoken', 'smartclassroom'),
-                                                                    "Error recibido: " . $resultAsArray['error'],
+                                                                    "Error recibido: " . $resultAsObject->error,
                                                                     PARAM_TEXT));
-                        else*/ if (!$resultAsString)  $settings->add(new admin_setting_configtext('SmartClassRoom_Token_Response', 
+                        else if (!$resultAsString)  $settings->add(new admin_setting_configtext('SmartClassRoom_Token_Response', 
                                                                         get_string('token', 'smartclassroom'), 
                                                                         get_string('authtoken', 'smartclassroom'),
                                                                         $resultAsString ,
@@ -85,7 +87,11 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
                                                                         PARAM_TEXT));
 	
 	}catch(Exception $e){
-		
+		$settings->add(new admin_setting_configtext('SmartClassRoom_Token_Response', 
+                                                                        get_string('token', 'smartclassroom'), 
+                                                                        get_string('authtoken', 'smartclassroom'),
+                                                                        'error irrecuperable exception: '.$anotherWayOfError,
+                                                                        PARAM_TEXT));
 	}
         $settings->add(new admin_setting_configtext('SmartClassRoom_Token', get_string('token', 'smartclassroom'),
             "<button type=\"button\" class=\"get_token_button\">{$connect}</button>", "", PARAM_TEXT));

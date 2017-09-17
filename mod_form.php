@@ -74,27 +74,27 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
         $mform->addElement('header', 'unittype', get_string('unittype', 'smartclassroom'));
 
         //$mform->addElement('static', 'label2', 'smartclassroomsetting2', 'Your smartclassroom fields go here. Replace me!');
-	$mform->addElement('select', 'scrcourse', get_string('course', 'smartclassroom'), array(
+	$mform->addElement('select', 'scrcourse', get_string('selectcourse', 'smartclassroom'), array(
 		"" => get_string("selectcourse",'smartclassroom'),
-                "1primary" => get_string("firstprimary", 'smartclassroom'),
-		"2primary" => get_string("secondprimary", 'smartclassroom'),
-		"3primary" => get_string("thirdprimary", 'smartclassroom'),
-		"4primary" => get_string("fourthprimary", 'smartclassroom'),
-		"5primary" => get_string("fifthprimary", 'smartclassroom'),
-		"6primary" => get_string("sixthprimary", 'smartclassroom'),
-		"1secundary" => get_string("firstsecundary", 'smartclassroom'),
-		"2secundary" => get_string("secondsecundary", 'smartclassroom'),
-		"3secundary" => get_string("thirdsecundary", 'smartclassroom'),
-		"4secundary" => get_string("fourthsecundary", 'smartclassroom'))
+                "firstprimary" => get_string("firstprimary", 'smartclassroom'),
+		"secondprimary" => get_string("secondprimary", 'smartclassroom'),
+		"thirdprimary" => get_string("thirdprimary", 'smartclassroom'),
+		"fourthprimary" => get_string("fourthprimary", 'smartclassroom'),
+		"fifthprimary" => get_string("fifthprimary", 'smartclassroom'),
+		"sixthprimary" => get_string("sixthprimary", 'smartclassroom'),
+		"firstsecundary" => get_string("firstsecundary", 'smartclassroom'),
+		"secondsecundary" => get_string("secondsecundary", 'smartclassroom'),
+		"thirdsecundary" => get_string("thirdsecundary", 'smartclassroom'),
+		"fourthsecundary" => get_string("fourthsecundary", 'smartclassroom'))
 	);
-	$mform->addElement('select', 'scrbook', get_string('book', 'smartclassroom'), array(
+	$mform->addElement('select', 'scrbook', get_string('selectbook', 'smartclassroom'), array(
 		"" => get_string("selectbook",'smartclassroom'),
                 "maths" => get_string("maths", 'smartclassroom'),
 		"spanish" => get_string("spanish", 'smartclassroom'),
 		"english" => get_string("english", 'smartclassroom'),
 		"science" => get_string("science", 'smartclassroom'),
 	));
-	$mform->addElement('select', 'scrunity', get_string('unity', 'smartclassroom'), array(
+	$mform->addElement('select', 'scrunit', get_string('selectunit', 'smartclassroom'), array(
 		"" => get_string("selectunit",'smartclassroom'),
                 "first" => get_string("first", 'smartclassroom'),
 		"second" => get_string("second", 'smartclassroom'),
@@ -103,7 +103,16 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();
+        
+        //MODO NATIVO
+        $mform->addElement('header', 'nativemodeheader', get_string('nativemode', 'smartclassroom'));
 
+        $mform->addElement('select', 'nativemode', get_string('nativemode', 'smartclassroom'), array(
+		"" => get_string("selectnative",'smartclassroom'),
+                "0" => get_string("nativo", 'smartclassroom'),
+		"1" => get_string("ventana", 'smartclassroom'),
+		
+	));
         // Add standard elements, common to all modules.
         $this->standard_coursemodule_elements();
 
