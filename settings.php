@@ -82,7 +82,7 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
                                  '', PARAM_TEXT)); 
             $settings->add(new admin_setting_heading('smartclassroommodconnectionresult', 
                                                     get_string('smartclassroommodconnectionresult', 'smartclassroom'),
-                                                    '<p title="'.$resultAsObject->access_token.'">'.substr($resultAsObject->access_token,50).'</p>'
+                                                    '<p title="'.$resultAsObject->access_token.'">'.substr($resultAsObject->access_token,0,50).'</p>'
                                                     )
                           );
                         
