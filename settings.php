@@ -141,22 +141,22 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
             
         }*/
     if  (!isset($resultAsObject2)){
-            $settings->add(new admin_setting_configtext('smartclassroomfilters',
+            $settings->add(new admin_setting_configtext('smartclassroom_filters',
                             get_string('smartclassroomfilters', 'smartclassroom'),
                             get_string('smartclassroomfilters', 'smartclassroom'),
                             "Error recibido: ",
                             PARAM_TEXT));
         } else {
-            $settings->add(new admin_setting_heading('smartclassroomfilters',
+            $settings->add(new admin_setting_heading('smartclassroom_filters',
                             get_string('smartclassroomfilters', 'smartclassroom'),
                             get_string('smartclassroomfilters', 'smartclassroom')));
 
-            $settings->add(new admin_setting_configselect('primaryfilter',
+            $settings->add(new admin_setting_configselect('smartclassroom_primaryfilter',
                             get_string('smartclassroomprimaryfilter', 'smartclassroom'),
                             get_string('smartclassroomprimaryfilter', 'smartclassroom'),
                             '', $filters));
 
-            $settings->add(new admin_setting_configselect('secondaryfilter',
+            $settings->add(new admin_setting_configselect('smartclassroom_secondaryfilter',
                             get_string('smartclassroomsecondaryfilter', 'smartclassroom'),
                             get_string('smartclassroomsecondaryfilter', 'smartclassroom'),
                             '', $filters));
