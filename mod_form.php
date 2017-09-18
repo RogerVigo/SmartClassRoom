@@ -42,10 +42,41 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
      * Defines forms elements
      */
     public function definition() {
-        global $CFG;
+        global $CFG, $PAGE;
 
         $mform = $this->_form;
+        $step = optional_param('step', 0, PARAM_INT);
 
+        $section = optional_param('section', 0, PARAM_INT);
+        $course = optional_param('course', 0, PARAM_INT);
+        $return = optional_param('return', 0, PARAM_INT);
+        $sr = optional_param('sr', 0, PARAM_INT);
+
+        $nextstep = $step + 1;
+        echo new moodle_url('/course/modedit.php',
+                                                            array('add' => 'smartclassroom',
+                                                                  'section' => $section,
+                                                                  'course' => $course,
+                                                                  'return' => $return,
+                                                                  'sr' => $sr,
+                                                                  'step' => $nextstep)
+                                                                    );
+        
+        if ($step != 2) {
+            
+            $mform->updateAttributes(array('action' => new moodle_url('/course/modedit.php',
+                                                            array('add' => 'smartclassroom',
+                                                                  'section' => $section,
+                                                                  'course' => $course,
+                                                                  'return' => $return,
+                                                                  'sr' => $sr,
+                                                                  'step' => $nextstep)
+                                                                    )
+                                        )
+                                    );
+        }
+        
+        
         // Adding the "general" fieldset, where all the common settings are showed.
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
@@ -116,7 +147,19 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
         // Add standard elements, common to all modules.
         $this->standard_coursemodule_elements();
 
+        $mform->addElement('header', 'nextheader', get_string('nextheader', 'smartclassroom'));
+
+        switch($step){
+            
+            case 0:
+            case 1:$mform->addElement('submit','next',get_string('next','smartclassroom'));
+                    break;
+            case 2: $this->add_action_buttons();
+                    break;
+            default:break;
+            
+        }
         // Add standard buttons, common to all modules.
-        $this->add_action_buttons();
+        
     }
 }
