@@ -2,8 +2,9 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-if ($ADMIN->fulltree) {
+$ADMIN->add('modsettings', new admin_category('modsmartclassroomfolder', new lang_string('pluginname', 'mod_smartclassroom'), $module->is_enabled()));
 
+if ($ADMIN->fulltree) {
     $connect = get_string('connect', 'smartclassroom');
     $template = "
 <script type=\"text/javascript\">
@@ -113,7 +114,7 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
         //               curl_setopt($curlResource, CURLOPT_HTTPHEADER, array($authHeader));
         //no vuelques la respuesta, devuelvemela en un string
         curl_setopt($curlResource2, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: text/plain'));
+        curl_setopt($curlResource2, CURLOPT_HTTPHEADER, array('Accept: text/plain'));
         $resultAsString2 = curl_exec($curlResource2);
         $resultAsObject2 = json_decode($resultAsString2);
         $anotherWayOfError2 = curl_error($curlResource2);
@@ -163,5 +164,6 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
         }
 }
 
-
+//$settings = "";
+$ADMIN->add('modsmartclassroomfolder', new admin_category('prueba1', $connect, !$module->is_enabled()));
 

@@ -28,6 +28,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['pluginname'] = 'Netex';
 $string['modulename'] = 'Smart ClassRoom';
 $string['modulenameplural'] = 'SmartClassRooms';
 $string['modulename_help'] = 'Trololo Use the smartclassroom module for... | The smartclassroom module allows...';
@@ -88,10 +89,10 @@ $string['smartclassroommodconnectionsettings'] = 'Valores predeterminados para l
 $string['smartclassroommodconnectionsettingsextended'] = 'Introduzca aqui las ips o dominios de conexion de las apis de netex';
 $string['clientid'] = 'Identificador de Cliente en Netex';
 $string['smartclassroommodconnectionresult'] = 'Resultado de la autenticacion';
-$string['next'] = 'Siguiente';
-$string['clientid'] = 'Identificador de Cliente en Netex';
-$string['nextheader'] = 'Pulse para seleccionar siguiente elemento.';
-$string['smartclassroomfilters'] = 'Filtros de actividad';
-$string['smartclassroomprimaryfilter'] = 'Filtro primario';
-$string['smartclassroomsecondaryfilter'] = 'Filtro secundario';
+$string['next'] = 'Next';
+$string['clientid'] = 'Netex client ID';
+$string['nextheader'] = 'Push to select next element.';
+$string['smartclassroomfilters'] = 'Activity filters';
+$string['smartclassroomprimaryfilter'] = 'Primary filter';
+$string['smartclassroomsecondaryfilter'] = 'Secundary filter';
 $string[''] = '';
