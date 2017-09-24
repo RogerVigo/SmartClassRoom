@@ -95,4 +95,5 @@ $string['nextheader'] = 'Push to select next element.';
 $string['smartclassroomfilters'] = 'Activity filters';
 $string['smartclassroomprimaryfilter'] = 'Primary filter';
 $string['smartclassroomsecondaryfilter'] = 'Secundary filter';
+$string['smartclassroomschools'] = 'Schools';
 $string[''] = '';

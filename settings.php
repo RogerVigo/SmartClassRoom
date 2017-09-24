@@ -2,41 +2,12 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$ADMIN->add('modsettings', new admin_category('modsmartclassroomfolder', new lang_string('pluginname', 'mod_smartclassroom'), $module->is_enabled()));
+$ADMIN->add('modsettings', new admin_category('modsmartclassroomfolder', new lang_string('pluginname', 'mod_smartclassroom'))); //Con esto decimos que queremos una carpeta -> ver lib/adminlib.php
+
+$settings = new admin_settingpage($section, get_string('modulename', 'mod_smartclassroom'), 'moodle/site:config', false); //Si ponemos una carpeta, es necesario tener una nueva settings page -> ver lib/adminlib.php
 
 if ($ADMIN->fulltree) {
-    $connect = get_string('connect', 'smartclassroom');
-    $template = "
-<script type=\"text/javascript\">
-//<![CDATA[
-console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
-	Y.one('.get_token_button').on('click', function(e){
-	var config = {
-		method: 'POST',
-		headers: {
-			Authorization: 'Basic ' + btoa('smart-client:gave-chile-moment-wood')
-		},
-		on: {
-			success: function(){
-				console.log(\"Exito!\");
-			},
-			failure: function(){
-				console.log(\"Error!\");
-			}    			
-		},
-		xdr: {
-			use: 'native'
-		}
-	}
-	
-	var url = 'http://gradiant-dev-classroom.smarted.cloud:3065/api/v1/oauth/token?grant_type=client_credentials';
-	Y.io(url, config);
-	});
-});
-//]]
-</script>
-";
+    
     $settings->add(new admin_setting_heading('smartclassroommodeditcredentials', get_string('editcredentials', 'smartclassroom'), get_string('editcredentialsextended', 'smartclassroom')));
     $settings->add(new admin_setting_configtext('smartclassroom_api_key', get_string('apikey', 'smartclassroom'),
                     get_string('setapikey', 'smartclassroom'), "smart-xunta", PARAM_TEXT));
@@ -52,7 +23,7 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
                     get_string('setbackofficeip', 'smartclassroom'), "http://wm33.netexlearning.cloud/tdidacta-webapp", PARAM_TEXT));
     $settings->add(new admin_setting_configtext('smartclassroom_scr', get_string('smartclassroomip', 'smartclassroom'),
                     get_string('setsmartclassroomip', 'smartclassroom'), "", PARAM_TEXT));
-    try {
+   /* try {
         $curlResource = curl_init();
 
         curl_setopt($curlResource, CURLOPT_URL, "http://gradiant-dev-classroom.smarted.cloud:3065/api/v1/oauth/token?grant_type=client_credentials");
@@ -70,7 +41,7 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
         curl_close($curlResource);
     } catch (Exception $e) {
         
-    }
+    }*/
     if (isset($resultAsObject->access_token)) {
 
         /* $settings->add(new admin_setting_configtext('smartclassroom_token_response', 
@@ -164,6 +135,7 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
         }
 }
 
-//$settings = "";
-$ADMIN->add('modsmartclassroomfolder', new admin_category('prueba1', $connect, !$module->is_enabled()));
-
+$ADMIN->add('modsmartclassroomfolder', $settings); // Tell core we already added the settings structure.
+$settings = null;
+$ADMIN->add('modsmartclassroomfolder', new admin_externalpage('smartclassroomschools', get_string('smartclassroomschools', 'mod_smartclassroom'), "$CFG->wwwroot/mod/smartclassroom/schools.php"));
+//new moodle_url('/mod/smartclassroom/archivo.php',array parámetros de envío) Te lo dejo aqui escrito por si la forma de la url no te vale y necesitas pasar parametros o whatever

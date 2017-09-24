@@ -28,6 +28,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['pluginname'] = 'Netex';
 $string['modulename'] = 'Smart ClassRoom';
 $string['modulenameplural'] = 'SmartClassRooms';
 $string['modulename_help'] = 'Trololo Use the smartclassroom module for... | The smartclassroom module allows...';
