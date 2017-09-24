@@ -151,7 +151,7 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
    		try {
             $curlResource = curl_init();
 
-            curl_setopt($curlResource, CURLOPT_URL, "http://vm33.netexlearning.cloud/mvc/rest/v1/schools/".$schoolID."/books?page=0&size=6&metadata=".$primarySelected.",".$secondarySelected);
+            curl_setopt($curlResource, CURLOPT_URL, "http://vm33.netexlearning.cloud/mvc/rest/v1/schools/".$schoolID."/books?metadata=".$primarySelected.",".$secondarySelected);
 				//$authHeader = 'Authorization: Basic ' . base64_encode('smart-client:gave-chile-moment-wood');
             //Peticion GET
             curl_setopt($curlResource, CURLOPT_HTTPGET, true);
@@ -196,7 +196,8 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
                     echo '<br><br>';*/
                     $terciaryValues[$key] = $element['title'];
                     foreach ($element['units'] as $unit) {
-                    	$cuaternaryValues[$unit['url']] = $unit['title'];
+                    		$cuaternaryValues[$key]['title'] = $unit['title'];
+                    		$cuaternaryValues[$key]['url'] = $unit['url'];
                     	
                     }
                                         
@@ -264,13 +265,15 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
         
 		  if ($step > 0){
 		  
-				$selectT = $mform->addElement('select', 'scrterciary', get_string('selectbook', 'smartclassroom'), $terciaryValues,array());
+				$selectT = $mform->addElement('select', 'scrterciary', get_string('selectbook', 'smartclassroom'),array('' => get_string('selectbook', 'smartclassroom'))+ $terciaryValues, array('onchange' => 'javascript:fillCuaternary()'));
 		  
 				/* if ($step > 2) $selectT->setSelected($terciarySelected);*/
 		  
-				$selectC = $mform->addElement('select', 'scrcuaternary', get_string('selectunit', 'smartclassroom'), $cuaternaryValues,array());
+				$selectC = $mform->addElement('select', 'scrcuaternary', get_string('selectunit', 'smartclassroom'), array('' => get_string('selectunit', 'smartclassroom')),array());
 	  
 				/* if ($step > 2) $selectC->setSelected($cuaternarySelected);*/
+				
+	        $mform->addElement('html',"<div><button type=\"button\" id=\"createLTIButton\" onclick=\"currentUrl = 'modedit.php?add=smartclassroom&type=&course=2&section=1&return=0&sr=0&step=".$nextstep."';valuePrimary = document.getElementById('id_scrprimary').value;valueSecondary = document.getElementById('id_scrsecondary').value; document.getElementById('mform1').setAttribute('action', currentUrl+'&amp;scrprimary='+valuePrimary+'&amp;scrsecondary='+valueSecondary);document.getElementById('mform1').submit(); \">Crear Actividad</button></div>");
 		  
 		  }
 
