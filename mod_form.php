@@ -42,13 +42,111 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
      * Defines forms elements
      */
     public function definition() {
-        global $CFG, $PAGE, $DB;
+        global $CFG, $PAGE, $DB, $COURSE;
 
 
- 			
+ 			/*************************************************************************/
+        	// Si step está a 1, ya hemos confirmado la unidad que queremos, así que
+        	// crearemos si no existe el type de lti y la actividad lti correspondiente
+        	// redireccionando tras ello a la página del curso
+        	/*************************************************************************/
+         $step = optional_param('step', 0, PARAM_INT);
+			if ($step > 1) {
+			
+			   require_once($CFG->dirroot.'/lib/accesslib.php');
+			   require_once($CFG->dirroot.'/mod/lti/locallib.php');
+			   require_once($CFG->dirroot.'/mod/lti/lib.php');
+			
+
+
+			   
+			   $cuaternarySelected = optional_param('url', 0, PARAM_TEXT);
+			   $unitName = optional_param('unitName', 0, PARAM_TEXT);
+			   $course = optional_param('course', 0, PARAM_INT);
+			   $section = optional_param('section', 0, PARAM_INT);
+			   
+
+
+			   $ltiRecord = lti_get_tool_by_url_match($cuaternarySelected, $course, LTI_TOOL_STATE_ANY);
+			   if (!$ltiRecord) {
+    			//There are no tools (active, pending, or rejected) for the launch URL. Create a new pending tool
+  
+  
+	  				$tooltype = new stdClass();
+	  				
+	  				$tooltype->state = LTI_TOOL_STATE_CONFIGURED;
+	  				$tooltype->name = 'Tipo '.$unitName;
+	  				$tooltype->baseurl = $cuaternarySelected;
+		  			$toolconfig = new stdClass();
+	
+	   			$toolconfig->lti_toolurl = lti_get_domain_from_url($cuaternarySelected);
+	   			$toolconfig->lti_typename = $toolconfig->lti_toolurl;
+	   			
+	   			$toolconfig->lti_resourcekey = '1';
+	   			$toolconfig->lti_password = 'password';
+					$toolconfig->lti_launchcontainer = 4;
+					$toolconfig->lti_customparameters = "";
+					$toolconfig->lti_sendname = 1;
+					$toolconfig->lti_sendemailaddr = 1;
+					$toolconfig->lti_acceptgrades = 1;
+					$toolconfig->lti_servicesalt = uniqid('',true);
+					$toolconfig->lti_organizationid = '';
+					$toolconfig->lti_organizationurl = '';
+					$toolconfig->lti_forcessl = 0;
+					$toolconfig->lti_coursevisible = 0;
+						 
+					lti_add_type($tooltype, $toolconfig);
+				}
+				 
+				
+				$lti = new stdClass();
+				$lti->course = $course;
+				$lti->name = $unitName;
+				$lti->typeid = $ltiRecord->id;
+				$lti->toolurl = $cuaternarySelected;
+
+				$lti->instructorchoicesendname = 1;
+				$lti->instructorchoicesendemailaddr = 1;
+				$lti->instructorchoiceacceptgrades = 1;
+				$lti->launchcontainer = 4;
+				$lti->resourcekey = '1';
+				$lti->password = 'password';
+				$lti->servicesalt = uniqid('',true);
+				$lti->icon = '/mod/smartclassroom/pix/icon.gif';
+				
+				$lti->id = lti_add_instance($lti,'');
+				
+				$mod = new stdClass();
+			   $mod->course = $course;
+			   $mod->module = $DB->get_field('modules', 'id', array('name'=>'lti'));
+			   $mod->instance = $lti->id;
+			   $mod->section = $section;
+			   include_once("$CFG->dirroot/course/lib.php");
+			   if (! $mod->coursemodule = add_course_module($mod) ) {
+			       echo $OUTPUT->notification("Could not add a new course module to the course '" . $course . "'");
+			       return false;
+			   }
+			   $coursePath = $DB->get_field('context', 'id', array('instanceid'=>$course,'contextlevel' => 50));
+			  //$record = context::insert_context_record('70', $lti->id,'/1/3/'.$coursePath );
+			   $record = new stdClass();
+		        $record->contextlevel = '70';
+		        $record->instanceid   = $lti->id;
+		        $record->depth        = 0;
+		        $record->path         = null; //not known before insert
+		
+		        $record->id = $DB->insert_record('context', $record);
+		
+		        
+
+		            $record->path = '/1/3/'.$coursePath.'/'.$record->id;
+		            $record->depth = substr_count($record->path, '/');
+		            $DB->update_record('context', $record);
+		        
+				redirect(new moodle_url('/course/view.php',array('id' => $course)));
+			}       
         $mform = $this->_form;
         $mform->disable_form_change_checker();
-        $step = optional_param('step', 0, PARAM_INT);
+
 
         $section = optional_param('section', 0, PARAM_INT);
         $course = optional_param('course', 0, PARAM_INT);
@@ -58,7 +156,7 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
         $primarySelected = optional_param('scrprimary', 0, PARAM_INT);
         $secondarySelected = optional_param('scrsecondary', 0, PARAM_INT);
         $terciarySelected = optional_param('scrterciary', 0, PARAM_INT);
-        $cuaternarySelected = optional_param('scrcuaternary', 0, PARAM_INT);
+
         
         $primaryFilterName = "";
         $secondaryFilterName = "";
@@ -141,12 +239,17 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
         } catch (Exception $e) {
             
         }
+        $errorFilters = $anotherWayOfError;
         asort($primaryValues);
         asort($secondaryValues);
- 			/**print_r($primaryValues);
+        
+        print_r($resultAsObject);
+        echo '<br><br>';
+ 			print_r($primaryValues);
         echo '<br><br>';
         print_r($secondaryValues);
-        echo '<br><br>';*/
+        echo '<br><br>';
+        
         	if ($step > 0) {		
    		try {
             $curlResource = curl_init();
@@ -170,7 +273,7 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
             $cuaternaryValues = array();
 
             if (!empty($resultAsObject)){
-            	$books = $resultAsObject;
+            	$books = current($resultAsObject);
             	
                 foreach ($books as $book) {
                 	  //$id = current($book->_id);
@@ -224,12 +327,12 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
        /* print_r($anotherWayOfError);
         echo '<br><br>';*/
         
-		/*	echo 'terciary';
+			echo 'terciary';
         print_r(json_encode($terciaryValues));
         echo '<br><br>';
         echo 'cuaternary';
         print_r(json_encode($cuaternaryValues));
-        echo '<br><br>';*/
+        echo '<br><br>';
 
 		}
 		  
@@ -252,38 +355,52 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
         // ----------------------------------------------------------------------
         $mform->addElement('header', 'unittype', get_string('unittype', 'smartclassroom'));
 
-  
-	 	  $selectP = $mform->addElement('select', 'scrprimary', 
-	 	  											get_string('selection', 'smartclassroom') . ' ' . $primaryFilterName,
-	 	  											array('' => get_string('selection', 'smartclassroom') . ' ' . $primaryFilterName)+$primaryValues);
-	 	 /*  print_r(json_encode($primaryValues));
-        echo '<br><br>';*/
-	 	  if ($step > 0) $selectP->setSelected($primarySelected);
-      
-        $selectS = $mform->addElement('select', 'scrsecondary', get_string('selection', 'smartclassroom') . ' ' . $secondaryFilterName,array('' => get_string('selection', 'smartclassroom') . ' ' . $secondaryFilterName)+$secondaryValues/*,
-        											array('onchange' => 'javascript:checkFilters()')*/);
-        											
-			if ($step > 0) $selectS->setSelected($secondarySelected);
+  			if ($errorFilters !== false)
+  			{
+  			
+			 	  $selectP = $mform->addElement('select', 'scrprimary', 
+			 	  											get_string('selection', 'smartclassroom') . ' ' . $primaryFilterName,
+			 	  											array('' => get_string('selection', 'smartclassroom') . ' ' . $primaryFilterName)+$primaryValues);
+			 	   print_r(json_encode($primaryValues));
+		        echo '<br><br>';
+		        
+			 	  if ($step > 0) $selectP->setSelected($primarySelected);
+		      
+		        $selectS = $mform->addElement('select', 'scrsecondary', get_string('selection', 'smartclassroom') . ' ' . $secondaryFilterName,array('' => get_string('selection', 'smartclassroom') . ' ' . $secondaryFilterName)+$secondaryValues/*,
+		        											array('onchange' => 'javascript:checkFilters()')*/);
+		        											
+					if ($step > 0) $selectS->setSelected($secondarySelected);
+					        
+		        $mform->addElement('html',"<div><button type=\"button\" id=\"nextButton\" onclick=\"FiltraLibros(1); \">Buscar libros</button></div>");
+		        
+		        
+				  if ($step > 0){
+				  
+						$selectT = $mform->addElement('select', 'scrterciary', get_string('selectbook', 'smartclassroom'),array('' => get_string('selectbook', 'smartclassroom'))+ $terciaryValues, array('onchange' => 'javascript:fillCuaternary()'));
+				  
+						/* if ($step > 2) $selectT->setSelected($terciarySelected);*/
+				  
+						$selectC = $mform->addElement('select', 'scrcuaternary', get_string('selectunit', 'smartclassroom'), array('' => get_string('selectunit', 'smartclassroom')),array());
+			  
+						/* if ($step > 2) $selectC->setSelected($cuaternarySelected);*/
+						
+			        $mform->addElement('html',"<div><button type=\"button\" id=\"createLTIButton\" onclick=\"CreaActivity(2);\">Crear Actividad</button></div>");
 			        
-        $mform->addElement('html',"<div><button type=\"button\" id=\"nextButton\" onclick=\"currentUrl = 'modedit.php?add=smartclassroom&type=&course=2&section=1&return=0&sr=0&step=".$nextstep."';valuePrimary = document.getElementById('id_scrprimary').value;valueSecondary = document.getElementById('id_scrsecondary').value; document.getElementById('mform1').setAttribute('action', currentUrl+'&amp;scrprimary='+valuePrimary+'&amp;scrsecondary='+valueSecondary);document.getElementById('mform1').submit(); \">Buscar libros</button></div>");
-        
-        
-		  if ($step > 0){
-		  
-				$selectT = $mform->addElement('select', 'scrterciary', get_string('selectbook', 'smartclassroom'),array('' => get_string('selectbook', 'smartclassroom'))+ $terciaryValues, array('onchange' => 'javascript:fillCuaternary()'));
-		  
-				/* if ($step > 2) $selectT->setSelected($terciarySelected);*/
-		  
-				$selectC = $mform->addElement('select', 'scrcuaternary', get_string('selectunit', 'smartclassroom'), array('' => get_string('selectunit', 'smartclassroom')),array());
-	  
-				/* if ($step > 2) $selectC->setSelected($cuaternarySelected);*/
-				
-	        $mform->addElement('html',"<div><button type=\"button\" id=\"createLTIButton\" onclick=\"currentUrl = 'modedit.php?add=smartclassroom&type=&course=2&section=1&return=0&sr=0&step=".$nextstep."';valuePrimary = document.getElementById('id_scrprimary').value;valueSecondary = document.getElementById('id_scrsecondary').value; document.getElementById('mform1').setAttribute('action', currentUrl+'&amp;scrprimary='+valuePrimary+'&amp;scrsecondary='+valueSecondary);document.getElementById('mform1').submit(); \">Crear Actividad</button></div>");
-		  
-		  }
-
-		  $mform->setExpanded('unittype');
-        // Add standard grading elements.
+				  
+				  }
+		
+				 
+  			
+  			}
+  			else {
+  				
+  				$mform->addElement('html',"<div><p>".$errorFilters."</p></div>");
+  				$mform->addElement('html',"<div><p>".$resultAsString."</p></div>");
+  			}
+  			
+  			 $mform->setExpanded('unittype');
+  			 
+		        // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();
         
         //MODO NATIVO

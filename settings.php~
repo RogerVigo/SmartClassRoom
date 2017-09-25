@@ -2,9 +2,14 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$ADMIN->add('modsettings', new admin_category('modsmartclassroomfolder', new lang_string('pluginname', 'mod_smartclassroom'))); //Con esto decimos que queremos una carpeta -> ver lib/adminlib.php
 
+$ADMIN->add('modsettings', new admin_category('modsmartclassroomfolder', new lang_string('pluginname', 'mod_smartclassroom'))); //Con esto decimos que queremos una carpeta -> ver lib/adminlib.php
 $settings = new admin_settingpage($section, get_string('modulename', 'mod_smartclassroom'), 'moodle/site:config', false); //Si ponemos una carpeta, es necesario tener una nueva settings page -> ver lib/adminlib.php
+$ADMIN->add('modsmartclassroomfolder', $settings); // Tell core we already added the settings structure.
+//$ADMIN->add('modsmartclassroomfolder', new admin_externalpage('smartclassroomschools', get_string('smartclassroomschools', 'mod_smartclassroom'), "$CFG->wwwroot/mod/smartclassroom/schools.php"));
+//$ADMIN->add('userinterface', new admin_externalpage('schools', get_string('schools', 'smartclassroom'),$CFG->wwwdir . '/' . 'mod/smartclassroom/schools.php'));
+//$ADMIN->add('userinterface', new admin_settingpage('schools', get_string('schools', 'smartclassroom')));
+//new moodle_url('/mod/smartclassroom/archivo.php',array parámetros de envío) Te lo dejo aqui escrito por si la forma de la url no te vale y necesitas pasar parametros o whatever
 
 if ($ADMIN->fulltree) {
     
@@ -23,7 +28,7 @@ if ($ADMIN->fulltree) {
                     get_string('setbackofficeip', 'smartclassroom'), "http://wm33.netexlearning.cloud/tdidacta-webapp", PARAM_TEXT));
     $settings->add(new admin_setting_configtext('smartclassroom_scr', get_string('smartclassroomip', 'smartclassroom'),
                     get_string('setsmartclassroomip', 'smartclassroom'), "", PARAM_TEXT));
-   /* try {
+    try {
         $curlResource = curl_init();
 
         curl_setopt($curlResource, CURLOPT_URL, "http://gradiant-dev-classroom.smarted.cloud:3065/api/v1/oauth/token?grant_type=client_credentials");
@@ -41,7 +46,7 @@ if ($ADMIN->fulltree) {
         curl_close($curlResource);
     } catch (Exception $e) {
         
-    }*/
+    }
     if (isset($resultAsObject->access_token)) {
 
         /* $settings->add(new admin_setting_configtext('smartclassroom_token_response', 
@@ -85,7 +90,7 @@ if ($ADMIN->fulltree) {
         //               curl_setopt($curlResource, CURLOPT_HTTPHEADER, array($authHeader));
         //no vuelques la respuesta, devuelvemela en un string
         curl_setopt($curlResource2, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curlResource2, CURLOPT_HTTPHEADER, array('Accept: text/plain'));
+       // curl_setopt($curlResource2, CURLOPT_HTTPHEADER, array('Accept: text/plain'));
         $resultAsString2 = curl_exec($curlResource2);
         $resultAsObject2 = json_decode($resultAsString2);
         $anotherWayOfError2 = curl_error($curlResource2);
@@ -100,6 +105,8 @@ if ($ADMIN->fulltree) {
     } catch (Exception $e) {
         
     }
+    /*print_r($resultAsString2);
+    echo '<br><br>';*/
    /* if  (isset($resultAsObject2)){
             $settings->add(new admin_setting_configtext('smartclassroom_filters',
                             get_string('smartclassroomfilters', 'smartclassroom'),
@@ -112,11 +119,11 @@ if ($ADMIN->fulltree) {
                             '', array()));
             
         }*/
-    if  (!isset($resultAsObject2)){
+    if  ($anotherWayOfError2 === false){
             $settings->add(new admin_setting_configtext('smartclassroom_filters',
                             get_string('smartclassroomfilters', 'smartclassroom'),
                             get_string('smartclassroomfilters', 'smartclassroom'),
-                            "Error recibido: ",
+                            "Error recibido: ".$anotherWayOfError2,
                             PARAM_TEXT));
         } else {
             $settings->add(new admin_setting_heading('smartclassroom_filters',
@@ -135,6 +142,15 @@ if ($ADMIN->fulltree) {
         }
 }
 
-$ADMIN->add('modsmartclassroomfolder', $settings); // Tell core we already added the settings structure.
+
+
+$settings = new admin_settingpage('schools', get_string('schools', 'smartclassroom'));
+$ADMIN->add('modsmartclassroomfolder', $settings);
+$tablaColes = '<table><thead><th>Colegio</th><th>Estado</th><th>LTI Key</th><th>LTI Secret</th><th>Registrar</th></thead>';
+$colegios = array('Los Sauces','Maristas','Franciscanos','Pintor Laxeiro');
+foreach ($colegios as $coles)
+{
+	$tablaColes .= '<td>'.$coles.'</td><td></td><td></td><td></td><td></td>';   
+}
+    p($tablaColes);
 $settings = null;
-$ADMIN->add('modsmartclassroomfolder', new admin_externalpage('smartclassroomschools', get_string('smartclassroomschools', 'mod_smartclassroom'), "$CFG->wwwroot/mod/smartclassroom/schools.php"));
