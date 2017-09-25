@@ -51,6 +51,7 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
         	// redireccionando tras ello a la página del curso
         	/*************************************************************************/
          $step = optional_param('step', 0, PARAM_INT);
+
 			if ($step > 1) {
 			
 			   require_once($CFG->dirroot.'/lib/accesslib.php');
@@ -73,14 +74,16 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
   
   
 	  				$tooltype = new stdClass();
+					$toolconfig = new stdClass();
 	  				
 	  				$tooltype->state = LTI_TOOL_STATE_CONFIGURED;
-	  				$tooltype->name = 'Tipo '.$unitName;
-	  				$tooltype->baseurl = $cuaternarySelected;
-		  			$toolconfig = new stdClass();
+	  				//$tooltype->name = 'Tipo '.$unitName;
+	  				//$tooltype->baseurl = $cuaternarySelected;
+		  			
 	
-	   			$toolconfig->lti_toolurl = lti_get_domain_from_url($cuaternarySelected);
-	   			$toolconfig->lti_typename = $toolconfig->lti_toolurl;
+	   			//$toolconfig->lti_toolurl = lti_get_domain_from_url($cuaternarySelected);
+	   			$toolconfig->lti_toolurl = $cuaternarySelected;
+	   			$toolconfig->lti_typename = 'Tipo '.$unitName;
 	   			
 	   			$toolconfig->lti_resourcekey = '1';
 	   			$toolconfig->lti_password = 'password';
@@ -95,14 +98,15 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
 					$toolconfig->lti_forcessl = 0;
 					$toolconfig->lti_coursevisible = 0;
 						 
-					lti_add_type($tooltype, $toolconfig);
+					$ltiTypeId = lti_add_type($tooltype, $toolconfig);
 				}
 				 
 				
 				$lti = new stdClass();
 				$lti->course = $course;
 				$lti->name = $unitName;
-				$lti->typeid = $ltiRecord->id;
+				if ($ltiRecord) $lti->typeid = $ltiRecord->id;
+					else $lti->typeid = $ltiTypeId;
 				$lti->toolurl = $cuaternarySelected;
 
 				$lti->instructorchoicesendname = 1;
@@ -141,7 +145,7 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
 		            $record->path = '/1/3/'.$coursePath.'/'.$record->id;
 		            $record->depth = substr_count($record->path, '/');
 		            $DB->update_record('context', $record);
-		        
+		      $PAGE->requires->js_init_call('initFakeHidden');  
 				redirect(new moodle_url('/course/view.php',array('id' => $course)));
 			}       
         $mform = $this->_form;
@@ -243,12 +247,12 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
         asort($primaryValues);
         asort($secondaryValues);
         
-        print_r($resultAsObject);
+       /* print_r($resultAsObject);
         echo '<br><br>';
  			print_r($primaryValues);
         echo '<br><br>';
         print_r($secondaryValues);
-        echo '<br><br>';
+        echo '<br><br>';*/
         
         	if ($step > 0) {		
    		try {
@@ -327,12 +331,12 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
        /* print_r($anotherWayOfError);
         echo '<br><br>';*/
         
-			echo 'terciary';
+		/*	echo 'terciary';
         print_r(json_encode($terciaryValues));
         echo '<br><br>';
         echo 'cuaternary';
         print_r(json_encode($cuaternaryValues));
-        echo '<br><br>';
+        echo '<br><br>';*/
 
 		}
 		  
@@ -361,8 +365,8 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
 			 	  $selectP = $mform->addElement('select', 'scrprimary', 
 			 	  											get_string('selection', 'smartclassroom') . ' ' . $primaryFilterName,
 			 	  											array('' => get_string('selection', 'smartclassroom') . ' ' . $primaryFilterName)+$primaryValues);
-			 	   print_r(json_encode($primaryValues));
-		        echo '<br><br>';
+			 	   /*print_r(json_encode($primaryValues));
+		        echo '<br><br>';*/
 		        
 			 	  if ($step > 0) $selectP->setSelected($primarySelected);
 		      

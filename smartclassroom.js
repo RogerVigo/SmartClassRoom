@@ -32,7 +32,7 @@ function fillCuaternary()
 	/*console.log('valueTerciary escogido es:' + valueTerciary);*/
 	var possibleValues = cuaternarySelect[valueTerciary]; 
 
-	document.getElementById('id_scrcuaternary').innerHTML = document.getElementById('id_scrterciary').firstElementChild.outerHTML;
+	document.getElementById('id_scrcuaternary').innerHTML = document.getElementById('id_scrcuaternary').firstElementChild.outerHTML;
 	var keys = Object.keys(possibleValues);
 		for (i=0 ; i < keys.length ; i++)
 		{
@@ -79,10 +79,18 @@ function CreaActivity(step){
 url = document.getElementById('id_scrcuaternary').value;
 name = document.getElementById('id_scrcuaternary').options[document.getElementById('id_scrcuaternary').selectedIndex].text;
 course = document.getElementsByName('course')[0].value;
-currentUrl = 'modedit.php?add=smartclassroom&type=&course='+course+'&section=1&return=0&sr=0&step='+step+'&unitName='+name+'&url='+url;
+currentUrl = 'modedit.php?add=lti&type=&course='+course+'&section=1&return=0&sr=0&step='+step+'&unitName='+name+'&url='+url;
 console.log(currentUrl);
 valueCuaternary = document.getElementById('id_scrcuaternary').value; 
 document.getElementById('mform1').setAttribute('action', currentUrl);
 document.getElementById('mform1').submit();
 
+}
+
+function initFakeHidden()
+{
+	document.getElementsByName("modulename")[0].value = 'lti';
+	document.getElementsByName("add")[0].value = 'lti';
+	document.getElementsByName("_qf__mod_smartclassroom_mod_form")[0].setAttribute('name',"_qf__mod_lti_mod_form");
+										 
 }
