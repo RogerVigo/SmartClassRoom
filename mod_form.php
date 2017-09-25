@@ -140,11 +140,9 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
 		
 		        $record->id = $DB->insert_record('context', $record);
 		
-		        
-
-		            $record->path = '/1/3/'.$coursePath.'/'.$record->id;
-		            $record->depth = substr_count($record->path, '/');
-		            $DB->update_record('context', $record);
+	            $record->path = '/1/3/'.$coursePath.'/'.$record->id;
+	            $record->depth = substr_count($record->path, '/');
+	            $DB->update_record('context', $record);
 		      $PAGE->requires->js_init_call('initFakeHidden');  
 				redirect(new moodle_url('/course/view.php',array('id' => $course)));
 			}       
@@ -287,7 +285,7 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
                     $filters[$id]['title'] = current($book->course->title);
                     foreach ($book->auOrBlock as $unit) {
                     		$nuevaUnidad = array();
-								$nuevaUnidad['id'] = current($unit->_id);
+							$nuevaUnidad['id'] = current($unit->_id);
                     		$nuevaUnidad['title'] = current($unit->title);
                     		$nuevaUnidad['url'] = $unit->url;
                     		$filters[$id]['units'][] = $nuevaUnidad;	
@@ -375,7 +373,7 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
 		        											
 					if ($step > 0) $selectS->setSelected($secondarySelected);
 					        
-		        $mform->addElement('html',"<div><button type=\"button\" id=\"nextButton\" onclick=\"FiltraLibros(1); \">Buscar libros</button></div>");
+		        $mform->addElement('html','<div><button type="button" id="nextButton" onclick="FiltraLibros(1);">Buscar libros</button></div>');
 		        
 		        
 				  if ($step > 0){
@@ -388,7 +386,7 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
 			  
 						/* if ($step > 2) $selectC->setSelected($cuaternarySelected);*/
 						
-			        $mform->addElement('html',"<div><button type=\"button\" id=\"createLTIButton\" onclick=\"CreaActivity(2);\">Crear Actividad</button></div>");
+			        $mform->addElement('html','<div><button type="button" id="createLTIButton" onclick="CreaActivity(2);">Crear Actividad</button></div>');
 			        
 				  
 				  }

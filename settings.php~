@@ -5,11 +5,6 @@ defined('MOODLE_INTERNAL') || die;
 
 $ADMIN->add('modsettings', new admin_category('modsmartclassroomfolder', new lang_string('pluginname', 'mod_smartclassroom'))); //Con esto decimos que queremos una carpeta -> ver lib/adminlib.php
 $settings = new admin_settingpage($section, get_string('modulename', 'mod_smartclassroom'), 'moodle/site:config', false); //Si ponemos una carpeta, es necesario tener una nueva settings page -> ver lib/adminlib.php
-$ADMIN->add('modsmartclassroomfolder', $settings); // Tell core we already added the settings structure.
-//$ADMIN->add('modsmartclassroomfolder', new admin_externalpage('smartclassroomschools', get_string('smartclassroomschools', 'mod_smartclassroom'), "$CFG->wwwroot/mod/smartclassroom/schools.php"));
-//$ADMIN->add('userinterface', new admin_externalpage('schools', get_string('schools', 'smartclassroom'),$CFG->wwwdir . '/' . 'mod/smartclassroom/schools.php'));
-//$ADMIN->add('userinterface', new admin_settingpage('schools', get_string('schools', 'smartclassroom')));
-//new moodle_url('/mod/smartclassroom/archivo.php',array parámetros de envío) Te lo dejo aqui escrito por si la forma de la url no te vale y necesitas pasar parametros o whatever
 
 if ($ADMIN->fulltree) {
     
@@ -53,9 +48,6 @@ if ($ADMIN->fulltree) {
           get_string('token', 'smartclassroom'),
           get_string('authtoken', 'smartclassroom'),
           '', PARAM_TEXT)); */
-        $settings->add(new admin_setting_configtext('smartclassroom_token', get_string('token', 'smartclassroom'),
-                        "<button type=\"button\" class=\"get_token_button\">{$connect}</button>",
-                        '', PARAM_TEXT));
         $settings->add(new admin_setting_heading('smartclassroommodconnectionresult',
                         get_string('smartclassroommodconnectionresult', 'smartclassroom'),
                         '<p title="' . $resultAsObject->access_token . '">' . substr($resultAsObject->access_token, 0, 50) . '</p>'
@@ -142,15 +134,6 @@ if ($ADMIN->fulltree) {
         }
 }
 
-
-
-$settings = new admin_settingpage('schools', get_string('schools', 'smartclassroom'));
 $ADMIN->add('modsmartclassroomfolder', $settings);
-$tablaColes = '<table><thead><th>Colegio</th><th>Estado</th><th>LTI Key</th><th>LTI Secret</th><th>Registrar</th></thead>';
-$colegios = array('Los Sauces','Maristas','Franciscanos','Pintor Laxeiro');
-foreach ($colegios as $coles)
-{
-	$tablaColes .= '<td>'.$coles.'</td><td></td><td></td><td></td><td></td>';   
-}
-    p($tablaColes);
 $settings = null;
+
