@@ -143,10 +143,10 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
         }
         asort($primaryValues);
         asort($secondaryValues);
- 			print_r($primaryValues);
+ 			/**print_r($primaryValues);
         echo '<br><br>';
         print_r($secondaryValues);
-        echo '<br><br>';
+        echo '<br><br>';*/
         	if ($step > 0) {		
    		try {
             $curlResource = curl_init();
@@ -190,14 +190,18 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
                     
                     //$units[$nivel0->id] = $nivel0->auOrBlock;
                 }
-
-                foreach ($filters as $key => $element){
+						//echo 'Filters: ';print_r($filters);
+        				//echo '<br><br>';
+                	foreach ($filters as $key => $element){
                    /* print_r($element);
                     echo '<br><br>';*/
                     $terciaryValues[$key] = $element['title'];
                     foreach ($element['units'] as $unit) {
-                    		$cuaternaryValues[$key]['title'] = $unit['title'];
-                    		$cuaternaryValues[$key]['url'] = $unit['url'];
+                    		$nuevaUnidad = array();
+                    		$nuevaUnidad['title'] = $unit['title'];
+								$nuevaUnidad['url'] = $unit['url'];
+                    		$cuaternaryValues[$key][] = $nuevaUnidad; 
+                    		 
                     	
                     }
                                         
@@ -217,14 +221,15 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
        $PAGE->requires->js_init_call('initSelectsContainers', array(json_encode($terciaryValues),json_encode($cuaternaryValues)), true, $module);
        // print_r($resultAsObject);
         //echo '<br><br>';
-        print_r($anotherWayOfError);
-        echo '<br><br>';
+       /* print_r($anotherWayOfError);
+        echo '<br><br>';*/
         
-
+		/*	echo 'terciary';
         print_r(json_encode($terciaryValues));
         echo '<br><br>';
+        echo 'cuaternary';
         print_r(json_encode($cuaternaryValues));
-        echo '<br><br>';
+        echo '<br><br>';*/
 
 		}
 		  
@@ -251,8 +256,8 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
 	 	  $selectP = $mform->addElement('select', 'scrprimary', 
 	 	  											get_string('selection', 'smartclassroom') . ' ' . $primaryFilterName,
 	 	  											array('' => get_string('selection', 'smartclassroom') . ' ' . $primaryFilterName)+$primaryValues);
-	 	   print_r(json_encode($primaryValues));
-        echo '<br><br>';
+	 	 /*  print_r(json_encode($primaryValues));
+        echo '<br><br>';*/
 	 	  if ($step > 0) $selectP->setSelected($primarySelected);
       
         $selectS = $mform->addElement('select', 'scrsecondary', get_string('selection', 'smartclassroom') . ' ' . $secondaryFilterName,array('' => get_string('selection', 'smartclassroom') . ' ' . $secondaryFilterName)+$secondaryValues/*,
