@@ -21,7 +21,7 @@ $end = '</fieldset></div>';
 $content = $tablaColes;
 foreach ($colegios as $coles)
 {
-	$content .= '<tr><td class="cell name">'.$coles[0].'</td><td class="cell schoolCode">'.$coles[1].'</td><td class="cell">'.$coles[2].'</td><td class="cell">'.$coles[3].'</td><td class="cell ltiPass">'.$coles[4].'</td><td class="cell"><button type="button" class="registrar '.$coles[1].'">Registrar</button></td></tr>';   
+	$content .= '<tr><td class="cell">'.$coles[0].'</td><td class="cell">'.$coles[1].'</td><td class="cell">'.$coles[2].'</td><td class="cell">'.$coles[3].'</td><td class="cell">'.$coles[4].'</td><td class="cell"><button type="button" class="registrar '.$coles[1].'">Registrar</button></td></tr>';   
 }
 
 $content .= "</table>";
