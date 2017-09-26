@@ -67,19 +67,25 @@ function initSelectsContainers(yui3, terciary, cuaternary)
 
 function FiltraLibros(step){
 
-currentUrl = 'modedit.php?add=smartclassroom&type=&course=2&section=1&return=0&sr=0&step='+step;
+course = document.getElementsByName('course')[0].value;
+section = document.getElementsByName('section')[0].value;
+currentUrl = 'modedit.php?add=smartclassroom&course='+course+'&section='+section+'&return=0&sr=0&step='+step;
 valuePrimary = document.getElementById('id_scrprimary').value;
 valueSecondary = document.getElementById('id_scrsecondary').value; 
-document.getElementById('mform1').setAttribute('action', currentUrl+'&amp;scrprimary='+valuePrimary+'&amp;scrsecondary='+valueSecondary);
-document.getElementById('mform1').submit();
+//document.getElementById('mform1').setAttribute('action', currentUrl+'&amp;scrprimary='+valuePrimary+'&amp;scrsecondary='+valueSecondary);
+window.location.href = currentUrl+'&scrprimary='+valuePrimary+'&scrsecondary='+valueSecondary;
+//document.getElementById('mform1').submit();
 }
 
 function CreaActivity(step){
 
 url = document.getElementById('id_scrcuaternary').value;
 name = document.getElementById('id_scrcuaternary').options[document.getElementById('id_scrcuaternary').selectedIndex].text;
+
+section = document.getElementsByName('section')[0].value;
 course = document.getElementsByName('course')[0].value;
-currentUrl = 'modedit.php?add=lti&type=&course='+course+'&section=1&return=0&sr=0&step='+step+'&unitName='+name+'&url='+url;
+
+currentUrl = 'modedit.php?add=lti&type=&course='+course+'&section='+section+'&return=0&sr=0&step='+step+'&unitName='+name+'&url='+url;
 console.log(currentUrl);
 valueCuaternary = document.getElementById('id_scrcuaternary').value; 
 document.getElementById('mform1').setAttribute('action', currentUrl);

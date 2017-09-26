@@ -85,8 +85,8 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
 	   			$toolconfig->lti_toolurl = $cuaternarySelected;
 	   			$toolconfig->lti_typename = 'Tipo '.$unitName;
 	   			
-	   			$toolconfig->lti_resourcekey = '1';
-	   			$toolconfig->lti_password = 'password';
+	   			//$toolconfig->lti_resourcekey = '1';
+	   			//$toolconfig->lti_password = 'password';
 					$toolconfig->lti_launchcontainer = 4;
 					$toolconfig->lti_customparameters = "";
 					$toolconfig->lti_sendname = 1;
@@ -113,28 +113,30 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
 				$lti->instructorchoicesendemailaddr = 1;
 				$lti->instructorchoiceacceptgrades = 1;
 				$lti->launchcontainer = 4;
-				$lti->resourcekey = '1';
-				$lti->password = 'password';
+				//$lti->resourcekey = '1';
+				//$lti->password = 'password';
 				$lti->servicesalt = uniqid('',true);
 				$lti->icon = '/mod/smartclassroom/pix/icon.gif';
 				
 				$lti->id = lti_add_instance($lti,'');
-				
 				$mod = new stdClass();
 			   $mod->course = $course;
 			   $mod->module = $DB->get_field('modules', 'id', array('name'=>'lti'));
 			   $mod->instance = $lti->id;
+			   $mod->idnumber = '';
 			   $mod->section = $section;
 			   include_once("$CFG->dirroot/course/lib.php");
 			   if (! $mod->coursemodule = add_course_module($mod) ) {
 			       echo $OUTPUT->notification("Could not add a new course module to the course '" . $course . "'");
 			       return false;
 			   }
+			   course_add_cm_to_section($course, $mod->coursemodule, $section);
+			   
 			   $coursePath = $DB->get_field('context', 'id', array('instanceid'=>$course,'contextlevel' => 50));
 			  //$record = context::insert_context_record('70', $lti->id,'/1/3/'.$coursePath );
 			   $record = new stdClass();
 		        $record->contextlevel = '70';
-		        $record->instanceid   = $lti->id;
+		        $record->instanceid   = $mod->coursemodule;
 		        $record->depth        = 0;
 		        $record->path         = null; //not known before insert
 		
@@ -143,7 +145,13 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
 	            $record->path = '/1/3/'.$coursePath.'/'.$record->id;
 	            $record->depth = substr_count($record->path, '/');
 	            $DB->update_record('context', $record);
+		
+					increment_revision_number('course','cacherev',2);
+		
+
 		      $PAGE->requires->js_init_call('initFakeHidden');  
+		      
+
 				redirect(new moodle_url('/course/view.php',array('id' => $course)));
 			}       
         $mform = $this->_form;
@@ -178,7 +186,7 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // Adding the standard "name" field.
-        $mform->addElement('text', 'name', get_string('smartclassroomname', 'smartclassroom'), array('size' => '64'));
+      /*  $mform->addElement('text', 'name', get_string('smartclassroomname', 'smartclassroom'), array('size' => '64'));
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
         } else {
@@ -186,14 +194,14 @@ class mod_smartclassroom_mod_form extends moodleform_mod {
         }
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
-        $mform->addHelpButton('name', 'smartclassroomname', 'smartclassroom');
+        $mform->addHelpButton('name', 'smartclassroomname', 'smartclassroom');*/
 
         // Adding the standard "intro" and "introformat" fields.
-        if ($CFG->branch >= 29) {
+      /*  if ($CFG->branch >= 29) {
             $this->standard_intro_elements();
         } else {
             $this->add_intro_editor();
-        }
+        }*/
 
  			/***********************************************************************************/
         	// FieldSet tipo de unidad. 
