@@ -3,12 +3,15 @@
 require(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once($CFG->libdir.'/adminlib.php');
 
-global $PAGE;
+global $PAGE, $DB;
 
 admin_externalpage_setup('smartclassroomschools');
 
 // functionality like processing form submissions goes here
-$tablaColes = '<table class="flexible admintable generaltable" style="text-align:center"><thead><th class="header c0">Colegio</th><th class="header c0">Colegio ID</th><th class="header c1">Estado</th><th class="header c2">LTI Key</th><th class="header c3">LTI Secret</th><th class="header c4">Registrar</th></thead>';
+$customerID = $DB->get_record('config',array('name' => "smartclassroom_clientid"),'*');
+$token = $DB->get_record('config',array('name' => "smartclassroom_token_response"),'*');
+
+$tablaColes = '<table class="flexible admintable generaltable" data-customerID="'+ $customerID->value +'" data-token="'+ $token->value +'" style="text-align:center"><thead><th class="header c0">Colegio</th><th class="header c0">Colegio ID</th><th class="header c1">Estado</th><th class="header c2">LTI Key</th><th class="header c3">LTI Secret</th><th class="header c4">Registrar</th></thead>';
 $colegios = array(array('Los Sauces', '-', '<img id="imgState0" src="pix/i/warning.png">', '-', '-'),array('Maristas', '-', '<img id="imgState1"  src="pix/i/warning.png">', '-', '-'),array('Franciscanos', '-', '<img id="imgState2" src="pix/i/warning.png">', '-', '-'),array('Pintor Laxeiro', '-', '<img id="imgState3" src="pix/i/warning.png">', '-', '-'));
 
 echo $OUTPUT->header();
