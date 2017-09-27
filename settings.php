@@ -23,6 +23,7 @@ if ($ADMIN->fulltree) {
 	 $customerID = $DB->get_record('config', array('name' => "smartclassroom_clientid"), '*');$customerID = $customerID->value;
 	 $authIP = $DB->get_record('config', array('name' => "smartclassroom_oauth"), '*');
 	 $backofficeIP = $DB->get_record('config', array('name' => "smartclassroom_backoffice"), '*');
+	 $accessToken = $DB->get_record('config', array('name' => "smartclassroom_token_response"), '*');
 
     try {
         $curlResource = curl_init();
@@ -59,8 +60,8 @@ if ($ADMIN->fulltree) {
                 )
         );
     } else {
-    		print_r($resultAsObject);
-    		print_r($anotherWayOfError);echo '<br>';
+    	/*	print_r($resultAsObject);
+    		print_r($anotherWayOfError);echo '<br>';*/
         $settings->add(new admin_setting_heading('smartclassroommodconnectionresult',
                         get_string('smartclassroommodconnectionresult', 'smartclassroom'),
                         '<p style="color:red" title="Error">Error recibido: ' . $resultAsObject->status . ' ' . $resultAsObject->error . ' ' . $resultAsObject->message . '</p>'
@@ -85,7 +86,7 @@ if ($ADMIN->fulltree) {
         	$curlResource2 = curl_init();
 
         	curl_setopt($curlResource2, CURLOPT_URL, $backofficeIP->value."/mvc/rest/v1/customers/".$customerID."/bookmetadatas");
-			$authHeader = 'Authorization: Bearer ' . $resultAsObject->access_token;
+			$authHeader = 'Authorization: Bearer ' . $accessToken->value;
 
         //Peticion GET
         curl_setopt($curlResource2, CURLOPT_HTTPGET, true);
@@ -99,10 +100,15 @@ if ($ADMIN->fulltree) {
         $anotherWayOfError2 = curl_error($curlResource2);
         curl_close($curlResource2);
 
+
+
+
         if (!empty($resultAsObject2))
             foreach ($resultAsObject2 as $element) {
                 $filters[$element->id] = $element->name;
             }
+        
+        
 
        
     } catch (Exception $e) {
@@ -122,12 +128,13 @@ if ($ADMIN->fulltree) {
                             '', array()));
             
         }*/
-    if  ($anotherWayOfError2 === false){
-            $settings->add(new admin_setting_configtext('smartclassroom_filters',
-                            get_string('smartclassroomfilters', 'smartclassroom'),
-                            get_string('smartclassroomfilters', 'smartclassroom'),
-                            "Error recibido: ".$anotherWayOfError2,
-                            PARAM_TEXT));
+    if  (isset($resultAsObject2->error)){
+            $settings->add(new admin_setting_heading('smartclassroommodconnectionresult2',
+                        get_string('smartclassroommodconnectionresult2', 'smartclassroom'),
+                        '<p style="color:red" title="Error">Error recibido: ' . $resultAsObject2->error . '</p>'
+                )
+        );
+        
         } else {
             $settings->add(new admin_setting_heading('smartclassroom_filters',
                             get_string('smartclassroomfilters', 'smartclassroom'),
