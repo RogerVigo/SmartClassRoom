@@ -17,22 +17,17 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configtext('smartclassroom_clientid', get_string('clientid', 'smartclassroom'),
                     get_string('clientid', 'smartclassroom'), "1", PARAM_TEXT));
 
-    $settings->add(new admin_setting_heading('smartclassroommodconnectionsettings', get_string('smartclassroommodconnectionsettings', 'smartclassroom'), get_string('smartclassroommodconnectionsettingsextended', 'smartclassroom')));
-    $settings->add(new admin_setting_configtext('smartclassroom_oauth', get_string('oauthip', 'smartclassroom'),
-                    get_string('setoauthip', 'smartclassroom'), "http://gradiant-dev-classroom.smarted.cloud:3065", PARAM_TEXT));
-    $settings->add(new admin_setting_configtext('smartclassroom_backoffice', get_string('backofficeip', 'smartclassroom'),
-                    get_string('setbackofficeip', 'smartclassroom'), "http://wm33.netexlearning.cloud/tdidacta-webapp", PARAM_TEXT));
-    $settings->add(new admin_setting_configtext('smartclassroom_scr', get_string('smartclassroomip', 'smartclassroom'),
-                    get_string('setsmartclassroomip', 'smartclassroom'), "", PARAM_TEXT));
     
     $apikey = $DB->get_record('config', array('name' => "smartclassroom_api_key"), '*');
 	 $apisecret = $DB->get_record('config', array('name' => "smartclassroom_secret"), '*');
 	 $customerID = $DB->get_record('config', array('name' => "smartclassroom_clientid"), '*');$customerID = $customerID->value;
+	 $authIP = $DB->get_record('config', array('name' => "smartclassroom_oauth"), '*');
+	 $backofficeIP = $DB->get_record('config', array('name' => "smartclassroom_backoffice"), '*');
 
     try {
         $curlResource = curl_init();
 
-        curl_setopt($curlResource, CURLOPT_URL, "http://gradiant-dev-classroom.smarted.cloud:3065/api/v1/oauth/token?grant_type=client_credentials");
+        curl_setopt($curlResource, CURLOPT_URL, $authIP->value."/api/v1/oauth/token?grant_type=client_credentials");
         $authHeader = 'Authorization: Basic ' . base64_encode($apikey->value.':'.$apisecret->value);
 
         //Peticion POST
@@ -41,60 +36,66 @@ if ($ADMIN->fulltree) {
         curl_setopt($curlResource, CURLOPT_HTTPHEADER, array($authHeader));
         //no vuelques la respuesta, devuelvemela en un string
         curl_setopt($curlResource, CURLOPT_RETURNTRANSFER, true);
-        //curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic ');
+
         $resultAsString = curl_exec($curlResource);
         $resultAsObject = json_decode($resultAsString);
-        print_r($resultAsObject);echo '<br>';
+        
         $anotherWayOfError = curl_error($curlResource);
         curl_close($curlResource);
     } catch (Exception $e) {
         
     }
+    $tokenSession = $resultAsObject->access_token; 
+    $settings->add(new admin_setting_configtext('smartclassroom_token_response', get_string('authtoken', 'smartclassroom'),
+              get_string('token', 'smartclassroom'), '', PARAM_TEXT,100));
     if (isset($resultAsObject->access_token)) {
 
-        /* $settings->add(new admin_setting_configtext('smartclassroom_token_response', 
-          get_string('token', 'smartclassroom'),
-          get_string('authtoken', 'smartclassroom'),
-          '', PARAM_TEXT)); */
+			//print_r($resultAsObject->access_token);echo '<br>';
+       
+        
         $settings->add(new admin_setting_heading('smartclassroommodconnectionresult',
                         get_string('smartclassroommodconnectionresult', 'smartclassroom'),
-                        '<p title="' . $resultAsObject->access_token . '">' . substr($resultAsObject->access_token, 0, 50) . '</p>'
+                        '<p title="' . $tokenSession . '" style="max-width:50%;word-break: break-all;"><span style="color:darkGreen;">Correcta</span>:<br> ' . $tokenSession . '</p>'
                 )
         );
-    } else if (isset($resultAsObject->error))
-        $settings->add(new admin_setting_configtext('smartclassroom_token_response',
-                        get_string('token', 'smartclassroom'),
-                        get_string('authtoken', 'smartclassroom'),
-                        "Error recibido: " . $resultAsObject->error,
-                        PARAM_TEXT));
-    /* else if (!$resultAsString)  $settings->add(new admin_setting_configtext('smartclassroom_token_response', 
-      get_string('token', 'smartclassroom'),
-      get_string('authtoken', 'smartclassroom'),
-      $resultAsString ,
-      PARAM_TEXT));
-      else $settings->add(new admin_setting_configtext('smartclassroom_token_response',
-      get_string('token', 'smartclassroom'),
-      get_string('authtoken', 'smartclassroom'),
-      'error irrecuperable: '.$anotherWayOfError,
-      PARAM_TEXT)); */
+    } else {
+    		print_r($resultAsObject);
+    		print_r($anotherWayOfError);echo '<br>';
+        $settings->add(new admin_setting_heading('smartclassroommodconnectionresult',
+                        get_string('smartclassroommodconnectionresult', 'smartclassroom'),
+                        '<p style="color:red" title="Error">Error recibido: ' . $resultAsObject->status . ' ' . $resultAsObject->error . ' ' . $resultAsObject->message . '</p>'
+                )
+        );
+        
+    
+    }
+    
     $filters = array();
+
+ 	$settings->add(new admin_setting_heading('smartclassroommodconnectionsettings', get_string('smartclassroommodconnectionsettings', 'smartclassroom'), get_string('smartclassroommodconnectionsettingsextended', 'smartclassroom')));
+    $settings->add(new admin_setting_configtext('smartclassroom_oauth', get_string('oauthip', 'smartclassroom'),
+                    get_string('setoauthip', 'smartclassroom'), "http://gradiant-dev-classroom.smarted.cloud:3065", PARAM_TEXT));
+    $settings->add(new admin_setting_configtext('smartclassroom_backoffice', get_string('backofficeip', 'smartclassroom'),
+                    get_string('setbackofficeip', 'smartclassroom'), "http://vm33.netexlearning.cloud", PARAM_TEXT));
+    $settings->add(new admin_setting_configtext('smartclassroom_scr', get_string('smartclassroomip', 'smartclassroom'),
+                    get_string('setsmartclassroomip', 'smartclassroom'), "", PARAM_TEXT));
+   
 
     try {
         	$curlResource2 = curl_init();
 
-        	curl_setopt($curlResource2, CURLOPT_URL, "http://vm33.netexlearning.cloud/mvc/rest/v1/customers/".$customerID."/bookmetadatas");
-			$authHeader = 'Authorization:Bearer ' . $resultAsObject->access_token;
+        	curl_setopt($curlResource2, CURLOPT_URL, $backofficeIP->value."/mvc/rest/v1/customers/".$customerID."/bookmetadatas");
+			$authHeader = 'Authorization: Bearer ' . $resultAsObject->access_token;
 
         //Peticion GET
         curl_setopt($curlResource2, CURLOPT_HTTPGET, true);
         //Header con el authorization
-        curl_setopt($curlResource, CURLOPT_HTTPHEADER, array($authHeader));
+        curl_setopt($curlResource2, CURLOPT_HTTPHEADER, array($authHeader));
         //no vuelques la respuesta, devuelvemela en un string
         curl_setopt($curlResource2, CURLOPT_RETURNTRANSFER, true);
-       // curl_setopt($curlResource2, CURLOPT_HTTPHEADER, array('Accept: text/plain'));
+
         $resultAsString2 = curl_exec($curlResource2);
         $resultAsObject2 = json_decode($resultAsString2);
-        print_r($resultAsObject2);
         $anotherWayOfError2 = curl_error($curlResource2);
         curl_close($curlResource2);
 
