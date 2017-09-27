@@ -3,6 +3,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 
+
 $ADMIN->add('modsettings', new admin_category('modsmartclassroomfolder', new lang_string('pluginname', 'mod_smartclassroom'))); //Con esto decimos que queremos una carpeta -> ver lib/adminlib.php
 $settings = new admin_settingpage($section, get_string('modulename', 'mod_smartclassroom'), 'moodle/site:config', false); //Si ponemos una carpeta, es necesario tener una nueva settings page -> ver lib/adminlib.php
 
@@ -23,11 +24,17 @@ if ($ADMIN->fulltree) {
                     get_string('setbackofficeip', 'smartclassroom'), "http://wm33.netexlearning.cloud/tdidacta-webapp", PARAM_TEXT));
     $settings->add(new admin_setting_configtext('smartclassroom_scr', get_string('smartclassroomip', 'smartclassroom'),
                     get_string('setsmartclassroomip', 'smartclassroom'), "", PARAM_TEXT));
+    
+    $apikey = $DB->get_record('config', array('name' => "smartclassroom_api_key"), '*');
+	 $apisecret = $DB->get_record('config', array('name' => "smartclassroom_secret"), '*');
+	 $customerID = $DB->get_record('config', array('name' => "smartclassroom_clientid"), '*');$customerID = $customerID->value;
+
     try {
         $curlResource = curl_init();
 
         curl_setopt($curlResource, CURLOPT_URL, "http://gradiant-dev-classroom.smarted.cloud:3065/api/v1/oauth/token?grant_type=client_credentials");
-        $authHeader = 'Authorization: Basic ' . base64_encode('smart-client:gave-chile-moment-wood');
+        $authHeader = 'Authorization: Basic ' . base64_encode($apikey->value.':'.$apisecret->value);
+
         //Peticion POST
         curl_setopt($curlResource, CURLOPT_POST, true);
         //Header con el authorization
@@ -37,6 +44,7 @@ if ($ADMIN->fulltree) {
         //curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic ');
         $resultAsString = curl_exec($curlResource);
         $resultAsObject = json_decode($resultAsString);
+        print_r($resultAsObject);echo '<br>';
         $anotherWayOfError = curl_error($curlResource);
         curl_close($curlResource);
     } catch (Exception $e) {
@@ -72,19 +80,21 @@ if ($ADMIN->fulltree) {
     $filters = array();
 
     try {
-        $curlResource2 = curl_init();
+        	$curlResource2 = curl_init();
 
-        curl_setopt($curlResource2, CURLOPT_URL, "http://vm33.netexlearning.cloud/mvc/rest/v1/customers/1/bookmetadatas");
-//		$authHeader = 'Authorization: Basic ' . base64_encode('smart-client:gave-chile-moment-wood');
+        	curl_setopt($curlResource2, CURLOPT_URL, "http://vm33.netexlearning.cloud/mvc/rest/v1/customers/".$customerID."/bookmetadatas");
+			$authHeader = 'Authorization:Bearer ' . $resultAsObject->access_token;
+
         //Peticion GET
         curl_setopt($curlResource2, CURLOPT_HTTPGET, true);
         //Header con el authorization
-        //               curl_setopt($curlResource, CURLOPT_HTTPHEADER, array($authHeader));
+        curl_setopt($curlResource, CURLOPT_HTTPHEADER, array($authHeader));
         //no vuelques la respuesta, devuelvemela en un string
         curl_setopt($curlResource2, CURLOPT_RETURNTRANSFER, true);
        // curl_setopt($curlResource2, CURLOPT_HTTPHEADER, array('Accept: text/plain'));
         $resultAsString2 = curl_exec($curlResource2);
         $resultAsObject2 = json_decode($resultAsString2);
+        print_r($resultAsObject2);
         $anotherWayOfError2 = curl_error($curlResource2);
         curl_close($curlResource2);
 
