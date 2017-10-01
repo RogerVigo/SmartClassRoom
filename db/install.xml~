@@ -38,17 +38,5 @@
         <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
       </INDEXES>
     </TABLE>
-    <TABLE NAME="smartclassroom_schools" COMMENT="Guarda los colegios registrados contra el servidor de Netex">
-      <FIELDS>
-     	  <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="school_name" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="SchoolName" SEQUENCE="false" COMMENT="name field for schools"/>
-        <FIELD NAME="school_lti_key" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="SchoolLTIKey" SEQUENCE="false" COMMENT="lti key for school validation"/>
-        <FIELD NAME="school_lti_secret" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="SchoolLTISecret" SEQUENCE="false" COMMENT="lti secret for school validation"/>
-        <FIELD NAME="school_code" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="SchoolCode" SEQUENCE="false" COMMENT="school code identificator"/>
-        <FIELD NAME="school_id" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="SchoolID" SEQUENCE="false" COMMENT="school id for school validation"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-      </KEYS>
   </TABLES>
 </XMLDB>
