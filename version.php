@@ -28,8 +28,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_smartclassroom';
-$plugin->version = 2017092700;
-$plugin->release = 'v0.2';
+$plugin->version = 2017092701;
+$plugin->release = 'v0.3';
 $plugin->requires = 2013111800;
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->cron = 0;

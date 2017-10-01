@@ -15,21 +15,21 @@ function checkFilters()
 		{
 			var option = document.createElement("option");
 			option.text = terciarySelect[i];
-			//console.log(option.text);
+
 			option.value = i;
-			//console.log(option.value);
+
 			document.getElementById('id_scrterciary').appendChild(option);
 		}
 		document.getElementById('id_scrterciary').removeAttribute('disabled');	
 	} 
-	/*else console.log('Todavía sin elección');*/
+
 
 }
 
 function fillCuaternary()
 {
 	var valueTerciary = document.getElementById('id_scrterciary').value;
-	/*console.log('valueTerciary escogido es:' + valueTerciary);*/
+
 	var possibleValues = cuaternarySelect[valueTerciary]; 
 
 	document.getElementById('id_scrcuaternary').innerHTML = document.getElementById('id_scrcuaternary').firstElementChild.outerHTML;
@@ -39,13 +39,13 @@ function fillCuaternary()
 			var key = keys[i];
 			var option = document.createElement("option");
 			option.text = possibleValues[key].title;
-			/*console.log(option.text);*/
+
 			option.value = possibleValues[key].url;
-			/*console.log(option.value);*/
+
 			document.getElementById('id_scrcuaternary').appendChild(option);
 		}
 
-	//document.getElementById('id_scrcuaternary').removeAttribute('disabled');	
+
 }
 function initSelectsContainers(yui3, terciary, cuaternary)
 {
@@ -61,36 +61,47 @@ function initSelectsContainers(yui3, terciary, cuaternary)
 
 	terciarySelect = T;
 	cuaternarySelect = C;
-	/*console.log(T);*/
-	/*console.log(C);*/
+
 }
 
 function FiltraLibros(step){
 
+valuePrimary = document.getElementById('id_scrprimary').value;
+valueSecondary = document.getElementById('id_scrsecondary').value;
+
+if ((valuePrimary != '') && (valueSecondary != '')){
+
 course = document.getElementsByName('course')[0].value;
 section = document.getElementsByName('section')[0].value;
+nativemode = document.getElementById('id_nativemode').value;
 currentUrl = 'modedit.php?add=smartclassroom&course='+course+'&section='+section+'&return=0&sr=0&step='+step;
-valuePrimary = document.getElementById('id_scrprimary').value;
-valueSecondary = document.getElementById('id_scrsecondary').value; 
-//document.getElementById('mform1').setAttribute('action', currentUrl+'&amp;scrprimary='+valuePrimary+'&amp;scrsecondary='+valueSecondary);
-window.location.href = currentUrl+'&scrprimary='+valuePrimary+'&scrsecondary='+valueSecondary;
-//document.getElementById('mform1').submit();
+window.location.href = currentUrl+'&scrprimary='+valuePrimary+'&scrsecondary='+valueSecondary+'&nativemode='+nativemode;
+}
+else alert('Seleccione primero las opciones en los dos filtros');
+ 
+
 }
 
 function CreaActivity(step){
 
 url = document.getElementById('id_scrcuaternary').value;
-name = document.getElementById('id_scrcuaternary').options[document.getElementById('id_scrcuaternary').selectedIndex].text;
 
-section = document.getElementsByName('section')[0].value;
-course = document.getElementsByName('course')[0].value;
-
-currentUrl = 'modedit.php?add=lti&type=&course='+course+'&section='+section+'&return=0&sr=0&step='+step+'&unitName='+name+'&url='+url;
-console.log(currentUrl);
-valueCuaternary = document.getElementById('id_scrcuaternary').value; 
-document.getElementById('mform1').setAttribute('action', currentUrl);
-document.getElementById('mform1').submit();
-
+if (url != '')
+{
+	
+	name = document.getElementById('id_scrcuaternary').options[document.getElementById('id_scrcuaternary').selectedIndex].text;
+	
+	section = document.getElementsByName('section')[0].value;
+	course = document.getElementsByName('course')[0].value;
+	nativemode = document.getElementsByName('nativemode')[0].value;
+	
+	currentUrl = 'modedit.php?add=lti&type=&course='+course+'&section='+section+'&return=0&sr=0&step='+step+'&unitName='+name+'&url='+url+'&nativemode='+nativemode;
+	console.log(currentUrl);
+	valueCuaternary = document.getElementById('id_scrcuaternary').value; 
+	document.getElementById('mform1').setAttribute('action', currentUrl);
+	document.getElementById('mform1').submit();
+}
+else alert('Seleccione primero unidad.');
 }
 
 function initFakeHidden()

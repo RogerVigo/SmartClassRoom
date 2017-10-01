@@ -24,18 +24,20 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+
+
 /**
  * Custom uninstallation procedure
  */
 function xmldb_smartclassroom_uninstall() {
  global $CFG, $DB;
  
- $DB->execute('DELETE FROM moodlenetex.mdl_config WHERE mdl_config.name LIKE "%smartclassroom%";');
- $DB->execute('DELETE FROM moodlenetex.mdl_config_plugin WHERE mdl_config_plugin.name LIKE "%smartclassroom%";');
+ $DB->execute('DELETE FROM moodnetex.mdl_config WHERE mdl_config.name LIKE "%smartclassroom%"');
+ $DB->delete_records('config_plugins',array('plugin' => 'mod_smartclassroom'));
  
- $root_path = "$CFG->dirroot/mod/smartclassroom/"
+ $root_path = $CFG->dirroot."/mod/smartclassroom/";
  
- delete_plugin($root_path);
+ //delete_plugin($root_path);
  rmdir($root_path);
     return true;
 }
@@ -45,10 +47,12 @@ function delete_plugin($dir){
   while (($file = readdir($handle)) !== false){
    if (!in_array($file, array('.', '..')) && !is_dir($dir.$file)) 
     unlink($file);
-   }else if(is_dir($dir.$file)){
+   else if(is_dir($dir.$file)){
     delete_plugin($dir);
     rmdir($file);
    }
   }
  }
+}
+
 

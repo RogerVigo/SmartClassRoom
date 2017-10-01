@@ -4,17 +4,6 @@
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-   <TABLE NAME="smartclassroom_global_conf" COMMENT="Stores SmartClassRoom Configuration">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="apikey" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="123456789" SEQUENCE="false" COMMENT="apikey to auth vs SCR server"/>
-        <FIELD NAME="password" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Group that owns this wiki"/>
-        <FIELD NAME="server_ip" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="127.0.0.1" SEQUENCE="false" COMMENT="IP of the server of SmartClassRoom"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-      </KEYS>
-    </TABLE>
     <TABLE NAME="smartclassroom_course_conf" COMMENT="Stores SmartClassRoom Configuration">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -25,7 +14,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="smartclassroom_activities" COMMENT="Guarda la configuración de las actividades SmartClassRoom">
+    <TABLE NAME="smartclassroom" COMMENT="Guarda la configuración de las actividades SmartClassRoom">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Course smartclassroom activity belongs to"/>
@@ -34,11 +23,13 @@
         <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Format of the intro field (MOODLE, HTML, MARKDOWN...)"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-        <FIELD NAME="scr_curso" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-        <FIELD NAME="scr_libro" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-        <FIELD NAME="scr_unidad" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="scrcourse" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="scrbook" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="scrunit" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="grademethod" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="One of the values QUIZ_GRADEHIGHEST, QUIZ_GRADEAVERAGE, QUIZ_ATTEMPTFIRST or QUIZ_ATTEMPTLAST."/>
-        <FIELD NAME="native_mode" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Modo de visualizacion nativo o en ventana emergente"/>
+        <FIELD NAME="nativemode" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Modo de visualizacion nativo o en ventana emergente"/>
+        <FIELD NAME="primaryfilter" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="secondaryfilter" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -47,5 +38,17 @@
         <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
       </INDEXES>
     </TABLE>
+    <TABLE NAME="smartclassroom_schools" COMMENT="Guarda los colegios registrados contra el servidor de Netex">
+      <FIELDS>
+     	  <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="school_name" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="SchoolName" SEQUENCE="false" COMMENT="name field for schools"/>
+        <FIELD NAME="school_lti_key" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="SchoolLTIKey" SEQUENCE="false" COMMENT="lti key for school validation"/>
+        <FIELD NAME="school_lti_secret" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="SchoolLTISecret" SEQUENCE="false" COMMENT="lti secret for school validation"/>
+        <FIELD NAME="school_code" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="SchoolCode" SEQUENCE="false" COMMENT="school code identificator"/>
+        <FIELD NAME="school_id" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="SchoolID" SEQUENCE="false" COMMENT="school id for school validation"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
   </TABLES>
 </XMLDB>

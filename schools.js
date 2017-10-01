@@ -1,7 +1,7 @@
 YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
 	Y.all('tr button').on('click', function(e){
 		var randomCode = Math.floor(Math.random());
-		var buttonClicked = this;
+
 		var customerID = Y.one("table.admintable").getAttribute("data-customerID");
 		var token = Y.one("table.admintable").getAttribute("data-token");
 		//console.log(this.ancestor().siblings("td.name")._nodes[0].innerHTML);
@@ -12,7 +12,7 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
 			method: 'POST',
 			/*data: Y.JSON.parse(data),*/
 			headers: {
-				'Authorization': 'Bearer<'+token+'>'
+				'Authorization': 'Bearer '+token,
 				'Content-Type': 'application/json',
 			},
 			on: {
@@ -24,7 +24,7 @@ YUI().use('node', 'io', 'dump', 'json-parse', 'io-xdr', function(Y){
 					console.log("Error!");
 					//console.log(e.currentTarget._node);
 					var imgID = 'imgState' + document.getElementById(e.currentTarget._node.id).getAttribute('data-value');
-					document.getElementById(imgID).setAttribute('src',"pix/i/unknown.png");			
+					document.getElementById(imgID).setAttribute('src',"pix/i/warning.png");			
 				}    			
 			}
 		}
